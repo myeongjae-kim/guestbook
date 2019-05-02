@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'kim.myeongjae'
+version '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor("org.projectlombok:lombok")
+
+    runtime 'org.springframework.boot:spring-boot-devtools'
+}
