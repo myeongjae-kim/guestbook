@@ -30,14 +30,17 @@ class MentionServiceTest {
     }
 
     @Test
-    void createMention_ValidInput_NoException() {
+    void createMention_ValidInput_NoException() throws Exception {
         MentionRequest mentionRequest = new MentionRequest();
         mentionRequest.setName("name");
         mentionRequest.setContent("content");
 
-        // Test is successful if below statement does not throw any exception.
-        // The integration test checks whether the mention is really generated.
-        mentionService.createMention(mentionRequest);
+        try {
+            // A created mention is tested under the integration test.
+            mentionService.createMention(mentionRequest);
+        } catch (Exception e) {
+            throw new Exception("Test failed: " + e);
+        }
     }
 
     @Test
@@ -61,16 +64,19 @@ class MentionServiceTest {
     }
 
     @Test
-    void updateMention_ValidInput_NoException() throws MentionNotFoundException {
+    void updateMention_ValidInput_NoException() throws Exception {
         given(mentionRepository.findById(anyInt())).willReturn(Optional.of(new Mention()));
 
         MentionRequest mentionRequest = new MentionRequest();
         mentionRequest.setName("updated name");
         mentionRequest.setContent("updated content");
 
-        // Test is successful if below statement does not throw any exception.
-        // The integration test checks whether the mention is really updated.
-        mentionService.updateMention(1, mentionRequest);
+        try {
+            // An updated mention is tested under the integration test.
+            mentionService.updateMention(1, mentionRequest);
+        } catch (Exception e) {
+            throw new Exception("Test failed: " + e);
+        }
     }
 
     @Test
