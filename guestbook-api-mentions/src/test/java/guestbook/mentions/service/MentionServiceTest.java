@@ -8,6 +8,8 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.Optional;
 
+import guestbook.mentions.api.dto.MentionRequest;
+import guestbook.mentions.api.dto.MentionResponse;
 import guestbook.mentions.domain.Mention;
 import guestbook.mentions.domain.MentionRepository;
 import guestbook.mentions.exception.MentionNotFoundException;
@@ -28,11 +30,22 @@ class MentionServiceTest {
     }
 
     @Test
-    void getMention_ValidInput_MentionCreated() throws Exception {
+    void createMention_ValidInput_NoException() {
+        MentionRequest mentionRequest = new MentionRequest();
+        mentionRequest.setName("name");
+        mentionRequest.setContent("content");
+
+        // Test is successful if below statement does not throw any exception.
+        // The integration test checks whether the mention is really generated.
+        mentionService.createMention(mentionRequest);
+    }
+
+    @Test
+    void readMention_ValidInput_MentionFound() throws Exception {
         Mention mention = getMentionFixture();
         given(mentionRepository.findById(anyInt())).willReturn(Optional.of(mention));
 
-        Mention foundMention = mentionService.getMention(1);
+        MentionResponse foundMention = mentionService.readMention(1);
 
         then(foundMention)
                 .hasFieldOrPropertyWithValue("id", mention.getId())
@@ -42,8 +55,41 @@ class MentionServiceTest {
     }
 
     @Test
-    void getMention_NonExistentMentionId_MentionNotFoundException() {
+    void readMention_NonExistentMentionId_MentionNotFoundException() {
         given(mentionRepository.findById(anyInt())).willReturn(Optional.empty());
-        thenThrownBy(() -> mentionService.getMention(1)).isExactlyInstanceOf(MentionNotFoundException.class);
+        thenThrownBy(() -> mentionService.readMention(1)).isExactlyInstanceOf(MentionNotFoundException.class);
+    }
+
+    @Test
+    void updateMention_ValidInput_NoException() throws MentionNotFoundException {
+        given(mentionRepository.findById(anyInt())).willReturn(Optional.of(new Mention()));
+
+        MentionRequest mentionRequest = new MentionRequest();
+        mentionRequest.setName("updated name");
+        mentionRequest.setContent("updated content");
+
+        // Test is successful if below statement does not throw any exception.
+        // The integration test checks whether the mention is really updated.
+        mentionService.updateMention(1, mentionRequest);
+    }
+
+    @Test
+    void updateMention_NonExistentMentionId_MentionNotFoundException() {
+        given(mentionRepository.findById(anyInt())).willReturn(Optional.empty());
+        thenThrownBy(() -> mentionService.updateMention(1, new MentionRequest()))
+                .isExactlyInstanceOf(MentionNotFoundException.class);
+    }
+
+    @Test
+    void deleteMention_ValidInput_NoException() throws MentionNotFoundException {
+        given(mentionRepository.findById(anyInt())).willReturn(Optional.of(new Mention()));
+        mentionService.deleteMention(1);
+    }
+
+    @Test
+    void deleteMention_NonExistentMentionId_MentionNotFoundException() {
+        given(mentionRepository.findById(anyInt())).willReturn(Optional.empty());
+        thenThrownBy(() -> mentionService.deleteMention(1))
+                .isExactlyInstanceOf(MentionNotFoundException.class);
     }
 }

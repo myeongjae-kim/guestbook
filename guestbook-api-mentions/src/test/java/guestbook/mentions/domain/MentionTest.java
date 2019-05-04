@@ -29,4 +29,14 @@ public class MentionTest {
                 .hasFieldOrPropertyWithValue("name", "name")
                 .hasFieldOrPropertyWithValue("content", "content");
     }
+
+    @Test
+    void updateMention_ValidInput_MentionUpdated() {
+        Mention mention = Mention.builder().name("name").content("content").build();
+        mention.update("updated name", "updated content");
+
+        then(mention)
+                .hasFieldOrPropertyWithValue("name", "updated name")
+                .hasFieldOrPropertyWithValue("content", "updated content");
+    }
 }
