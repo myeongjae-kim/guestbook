@@ -1,6 +1,6 @@
 package guestbook.mentions.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface MentionRepository extends JpaRepository<Mention, Integer> {
+public interface MentionRepository extends CrudRepository<Mention, Integer> {
 }
