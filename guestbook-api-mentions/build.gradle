@@ -12,9 +12,15 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    
+
+    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
+    }
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testImplementation('org.mockito:mockito-junit-jupiter')
+    testCompile('org.junit.jupiter:junit-jupiter-params')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine')
+
     runtime 'com.h2database:h2'
     runtime 'org.springframework.boot:spring-boot-devtools'
 }
