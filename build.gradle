@@ -23,6 +23,10 @@ subprojects {
 		mavenCentral()
 	}
 
+	test {
+		useJUnitPlatform()
+	}
+
 	jacocoTestReport {
 		dependsOn test
 	}
