@@ -3,6 +3,7 @@ package guestbook.mentions.service;
 import static guestbook.mentions.domain.MentionTest.getMentionFixture;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,17 +32,17 @@ class MentionServiceTest {
     }
 
     @Test
-    void createMention_ValidInput_NoException() throws Exception {
+    void createMention_ValidInput_NoException() {
+        Mention mention = Mockito.mock(Mention.class);
+        given(mention.getId()).willReturn(1);
+        given(mentionRepository.save(any(Mention.class))).willReturn(mention);
+
         MentionRequest mentionRequest = new MentionRequest();
         mentionRequest.setName("name");
         mentionRequest.setContent("content");
 
-        try {
-            // A created mention is tested under the integration test.
-            mentionService.createMention(mentionRequest);
-        } catch (Exception e) {
-            throw new Exception("Test failed: " + e);
-        }
+        Integer id = mentionService.createMention(mentionRequest);
+        then(id).isNotNull();
     }
 
     @Test

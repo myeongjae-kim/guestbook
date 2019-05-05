@@ -17,10 +17,11 @@ public class MentionService {
         this.mentionRepository = mentionRepository;
     }
 
-    public void createMention(MentionRequest mentionRequest) {
-        mentionRepository.save(Mention.builder()
+    public Integer createMention(MentionRequest mentionRequest) {
+        Mention createdMention = mentionRepository.save(Mention.builder()
                 .name(mentionRequest.getName())
                 .content(mentionRequest.getContent()).build());
+        return createdMention.getId();
     }
 
     public MentionResponse readMention(Integer id) throws MentionNotFoundException {
@@ -28,7 +29,9 @@ public class MentionService {
     }
 
     public void updateMention(Integer id, MentionRequest mentionRequest) throws MentionNotFoundException {
-        findMentionById(id).update(mentionRequest.getName(), mentionRequest.getContent());
+        Mention foundMention = findMentionById(id);
+        foundMention.update(mentionRequest.getName(), mentionRequest.getContent());
+        mentionRepository.save(foundMention);
     }
 
     public void deleteMention(Integer id) throws MentionNotFoundException {

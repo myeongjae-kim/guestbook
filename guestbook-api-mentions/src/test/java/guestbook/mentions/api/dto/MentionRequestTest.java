@@ -9,8 +9,15 @@ import javax.validation.Validator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class MentionRequestTest {
+public class MentionRequestTest {
     private static Validator validator;
+
+    public static MentionRequest getMentionRequestFixture() {
+        MentionRequest mentionRequest = new MentionRequest();
+        mentionRequest.setName("name");
+        mentionRequest.setContent("content");
+        return mentionRequest;
+    }
 
     @BeforeAll
     static void setup() {
