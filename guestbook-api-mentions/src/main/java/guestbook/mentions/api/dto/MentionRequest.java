@@ -2,9 +2,11 @@ package guestbook.mentions.api.dto;
 
 import javax.validation.constraints.NotEmpty;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class MentionRequest {
     private @NotEmpty String name;
     private @NotEmpty String content;

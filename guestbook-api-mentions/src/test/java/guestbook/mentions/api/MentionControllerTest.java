@@ -5,6 +5,7 @@ import static guestbook.mentions.api.dto.MentionResponseTest.getMentionResponseF
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,6 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import guestbook.mentions.api.dto.MentionRequest;
+import guestbook.mentions.api.dto.MentionResponse;
+import guestbook.mentions.exception.MentionNotFoundException;
 import guestbook.mentions.service.MentionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +35,8 @@ class MentionControllerTest {
 
     @Test
     void get_ValidInput_MentionResponse() throws Exception {
-        given(mentionService.readMention(anyInt())).willReturn(getMentionResponseFixture());
+        MentionResponse mentionResponse = getMentionResponseFixture();
+        given(mentionService.readMention(anyInt())).willReturn(mentionResponse);
 
         mvc.perform(get("/{id}", 1))
                 .andExpect(status().isOk())
@@ -40,6 +44,18 @@ class MentionControllerTest {
                 .andExpect(jsonPath("name").value("name"))
                 .andExpect(jsonPath("content").value("content"))
                 .andExpect(jsonPath("createdAt").isNotEmpty());
+    }
+
+    @Test
+    void get_NonExistentId_ApiError() throws Exception {
+        when(mentionService.readMention(anyInt())).thenThrow(new MentionNotFoundException(1));
+
+        mvc.perform(get("/{id}", 1))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("timestamp").isNotEmpty())
+                .andExpect(jsonPath("status").isNumber())
+                .andExpect(jsonPath("error").isNotEmpty())
+                .andExpect(jsonPath("message").isNotEmpty());
     }
 
     @Test
@@ -56,6 +72,21 @@ class MentionControllerTest {
     }
 
     @Test
+    void post_EmptyFields_ApiError() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(new MentionRequest());
+
+        mvc.perform(
+                post("/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("timestamp").isNotEmpty())
+                .andExpect(jsonPath("status").isNumber())
+                .andExpect(jsonPath("error").isNotEmpty())
+                .andExpect(jsonPath("message").isNotEmpty());
+    }
+
+    @Test
     void put_ValidInput_MentionResponse() throws Exception {
         String requestBody = objectMapper.writeValueAsString(getMentionRequestFixture());
 
@@ -64,6 +95,21 @@ class MentionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void put_EmptyFields_ApiError() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(new MentionRequest());
+
+        mvc.perform(
+                put("/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("timestamp").isNotEmpty())
+                .andExpect(jsonPath("status").isNumber())
+                .andExpect(jsonPath("error").isNotEmpty())
+                .andExpect(jsonPath("message").isNotEmpty());
     }
 
     @Test

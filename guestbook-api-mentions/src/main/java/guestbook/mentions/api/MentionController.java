@@ -4,7 +4,6 @@ import javax.validation.Valid;
 
 import guestbook.mentions.api.dto.MentionRequest;
 import guestbook.mentions.api.dto.MentionResponse;
-import guestbook.mentions.exception.MentionNotFoundException;
 import guestbook.mentions.service.MentionService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,23 +29,20 @@ public class MentionController {
     }
 
     @GetMapping("/{id}")
-    //TODO: Remove throws by adding exception handling controller.
-    public MentionResponse read(@PathVariable Integer id) throws MentionNotFoundException {
+    public MentionResponse read(@PathVariable Integer id) {
         return mentionService.readMention(id);
     }
 
     @PutMapping("/{id}")
-    //TODO: Remove throws by adding exception handling controller.
     public void update(
             @PathVariable Integer id,
             @RequestBody @Valid MentionRequest mentionRequest
-    ) throws MentionNotFoundException {
+    ) {
         mentionService.updateMention(id, mentionRequest);
     }
 
     @DeleteMapping("/{id}")
-    //TODO: Remove throws by adding exception handling controller.
-    public void delete(@PathVariable Integer id) throws MentionNotFoundException {
+    public void delete(@PathVariable Integer id) {
         mentionService.deleteMention(id);
     }
 }
