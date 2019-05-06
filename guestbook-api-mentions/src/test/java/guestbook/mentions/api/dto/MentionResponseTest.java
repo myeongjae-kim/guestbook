@@ -6,7 +6,10 @@ import static org.assertj.core.api.BDDAssertions.then;
 import guestbook.mentions.domain.Mention;
 import org.junit.jupiter.api.Test;
 
-class MentionResponseTest {
+public class MentionResponseTest {
+    public static MentionResponse getMentionResponseFixture() {
+        return MentionResponse.of(getMentionFixture());
+    }
 
     @Test
     void generateMentionResponseFromMention_ValidInput_ReturnMention() {

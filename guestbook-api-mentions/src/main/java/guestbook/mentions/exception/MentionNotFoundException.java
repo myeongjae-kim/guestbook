@@ -1,7 +1,7 @@
 package guestbook.mentions.exception;
 
-public class MentionNotFoundException extends Exception{
+public class MentionNotFoundException extends RuntimeException {
     public MentionNotFoundException(Integer id) {
-        super("Test failed: mention id " + id + " is not found");
+        super("mention id " + id + " has not been found");
     }
 }

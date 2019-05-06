@@ -1,19 +1,21 @@
-plugins {
-    id 'java'
-}
-
-group 'kim.myeongjae'
 version '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor("org.projectlombok:lombok")
 
-    runtime 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
+    }
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testImplementation('org.mockito:mockito-junit-jupiter')
+    testCompile('org.junit.jupiter:junit-jupiter-params')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine')
 }
+
+bootJar { enabled = false }
+jar { enabled = true }
