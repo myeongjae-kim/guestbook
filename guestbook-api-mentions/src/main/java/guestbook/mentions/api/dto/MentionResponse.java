@@ -3,21 +3,23 @@ package guestbook.mentions.api.dto;
 import java.time.LocalDateTime;
 
 import guestbook.mentions.domain.Mention;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class MentionResponse {
     private Integer id;
     private String name;
     private String content;
     private LocalDateTime createdAt;
 
+    private MentionResponse() {}
+
     public static MentionResponse of(Mention mention) {
         MentionResponse mentionResponse = new MentionResponse();
-        mentionResponse.setId(mention.getId());
-        mentionResponse.setName(mention.getName());
-        mentionResponse.setContent(mention.getContent());
-        mentionResponse.setCreatedAt(mention.getCreatedAt());
+        mentionResponse.id = mention.getId();
+        mentionResponse.name = mention.getName();
+        mentionResponse.content = mention.getContent();
+        mentionResponse.createdAt = mention.getCreatedAt();
 
         return mentionResponse;
     }

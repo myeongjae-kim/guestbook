@@ -34,6 +34,6 @@ subprojects {
 
 project(':guestbook-api-mentions') {
 	dependencies {
-		compile project(':guestbook-api-common')
+		implementation project(':guestbook-api-common')
 	}
 }
