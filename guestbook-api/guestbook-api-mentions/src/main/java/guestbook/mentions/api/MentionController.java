@@ -36,7 +36,7 @@ public class MentionController {
         return mentionService.readMention(id);
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public List<MentionResponse> readAllMentions() {
         return mentionService.readAllMentions();
     }

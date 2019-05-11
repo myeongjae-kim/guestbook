@@ -3,13 +3,19 @@ import { returnBodyAsJSON, returnBodyAsNumber, throwErrorIfStatusIsNotOk } from 
 import IMentionRequest from "./dto/IMentionRequest";
 import IMentionResponse from "./dto/IMentionResponse";
 
-export const get = (id: number): Promise<IMentionResponse> =>
+export const get = (id: number): Promise<IMentionResponse | undefined> =>
   fetch(`http://localhost:8080/${id}`)
     .then(throwErrorIfStatusIsNotOk)
     .then(returnBodyAsJSON)
     .catch(alertError)
 
-export const post = (requestBody: IMentionRequest): Promise<number> =>
+export const getList = (): Promise<IMentionResponse[] | undefined> =>
+  fetch(`http://localhost:8080`)
+    .then(throwErrorIfStatusIsNotOk)
+    .then(returnBodyAsJSON)
+    .catch(alertError)
+
+export const post = (requestBody: IMentionRequest): Promise<number | undefined> =>
   fetch(`http://localhost:8080`, {
     method: 'POST',
     headers: {
