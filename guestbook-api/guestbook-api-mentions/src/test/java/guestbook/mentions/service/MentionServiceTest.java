@@ -78,6 +78,7 @@ class MentionServiceTest {
         List<MentionResponse> mentions = mentionService.readAllMentions();
         then(mentions)
                 .hasSize(2)
+                .isSorted()
                 .extracting("id")
                 .contains(1, 2);
     }

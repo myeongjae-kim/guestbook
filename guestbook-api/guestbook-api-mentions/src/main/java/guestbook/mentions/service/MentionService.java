@@ -1,6 +1,7 @@
 package guestbook.mentions.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import guestbook.mentions.api.dto.MentionRequest;
@@ -34,7 +35,7 @@ public class MentionService {
     public List<MentionResponse> readAllMentions() {
         List<MentionResponse> mentionsResponses = new ArrayList<>();
         mentionRepository.findAll().forEach(m -> mentionsResponses.add(MentionResponse.of(m)));
-        mentionsResponses.sort(MentionResponse::orderByCreatedAtDesc);
+        Collections.sort(mentionsResponses);
 
         return mentionsResponses;
     }

@@ -3,10 +3,12 @@ package guestbook.mentions.api.dto;
 import java.time.LocalDateTime;
 
 import guestbook.mentions.domain.Mention;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
-public class MentionResponse {
+@EqualsAndHashCode
+public class MentionResponse implements Comparable<MentionResponse> {
     private Integer id;
     private String name;
     private String content;
@@ -24,7 +26,8 @@ public class MentionResponse {
         return mentionResponse;
     }
 
-    public static Integer orderByCreatedAtDesc (MentionResponse a, MentionResponse b) {
-        return b.createdAt.isAfter(a.createdAt) ? 1 : -1;
+    @Override
+    public int compareTo(MentionResponse mentionResponse) {
+        return this.createdAt.isAfter(mentionResponse.createdAt) ? -1 : 1; // Order by desc
     }
 }
