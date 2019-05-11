@@ -1,5 +1,8 @@
 package guestbook.mentions.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import guestbook.mentions.api.dto.MentionRequest;
 import guestbook.mentions.api.dto.MentionResponse;
 import guestbook.mentions.domain.Mention;
@@ -26,6 +29,13 @@ public class MentionService {
 
     public MentionResponse readMention(Integer id) {
         return MentionResponse.of(findMentionById(id));
+    }
+
+    public List<MentionResponse> readAllMentions() {
+        List<MentionResponse> mentionsResponses = new ArrayList<>();
+        mentionRepository.findAllByOrderByCreatedAtDesc().forEach(m -> mentionsResponses.add(MentionResponse.of(m)));
+
+        return mentionsResponses;
     }
 
     public void updateMention(Integer id, MentionRequest mentionRequest) {

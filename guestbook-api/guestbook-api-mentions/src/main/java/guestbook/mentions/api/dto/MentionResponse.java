@@ -12,15 +12,14 @@ public class MentionResponse {
     private String content;
     private LocalDateTime createdAt;
 
-    private MentionResponse() {}
+    private MentionResponse(Mention mention) {
+        this.id = mention.getId();
+        this.name = mention.getName();
+        this.content = mention.getContent();
+        this.createdAt = mention.getCreatedAt();
+    }
 
     public static MentionResponse of(Mention mention) {
-        MentionResponse mentionResponse = new MentionResponse();
-        mentionResponse.id = mention.getId();
-        mentionResponse.name = mention.getName();
-        mentionResponse.content = mention.getContent();
-        mentionResponse.createdAt = mention.getCreatedAt();
-
-        return mentionResponse;
+        return new MentionResponse(mention);
     }
 }
