@@ -7,6 +7,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import guestbook.mentions.api.dto.MentionRequest;
@@ -63,6 +65,21 @@ class MentionServiceTest {
     void readMention_NonExistentMentionId_MentionNotFoundException() {
         given(mentionRepository.findById(anyInt())).willReturn(Optional.empty());
         thenThrownBy(() -> mentionService.readMention(1)).isExactlyInstanceOf(MentionNotFoundException.class);
+    }
+
+    @Test
+    void readAllMention_ValidInput_MentionResponseList() {
+        Iterable<Mention> allMentions = Arrays.asList(
+                getMentionFixture(1),
+                getMentionFixture(2)
+        );
+        given(mentionRepository.findAll()).willReturn(allMentions);
+
+        List<MentionResponse> mentions = mentionService.readAllMentions();
+        then(mentions)
+                .hasSize(2)
+                .extracting("id")
+                .contains(1, 2);
     }
 
     @Test
