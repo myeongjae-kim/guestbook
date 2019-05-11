@@ -1,5 +1,6 @@
 package guestbook.mentions.api;
 
+import java.util.List;
 import javax.validation.Valid;
 
 import guestbook.mentions.api.dto.MentionRequest;
@@ -31,6 +32,11 @@ public class MentionController {
     @GetMapping("/{id}")
     public MentionResponse read(@PathVariable Integer id) {
         return mentionService.readMention(id);
+    }
+
+    @GetMapping("/list")
+    public List<MentionResponse> readAllMentions() {
+        return mentionService.readAllMentions();
     }
 
     @PutMapping("/{id}")

@@ -32,10 +32,11 @@ public class MentionService {
     }
 
     public List<MentionResponse> readAllMentions() {
-        List<MentionResponse> mentions = new ArrayList<>();
-        mentionRepository.findAll().forEach(mention -> mentions.add(MentionResponse.of(mention)));
+        List<MentionResponse> mentionsResponses = new ArrayList<>();
+        mentionRepository.findAll().forEach(m -> mentionsResponses.add(MentionResponse.of(m)));
+        mentionsResponses.sort(MentionResponse::orderByCreatedAtDesc);
 
-        return mentions;
+        return mentionsResponses;
     }
 
     public void updateMention(Integer id, MentionRequest mentionRequest) {

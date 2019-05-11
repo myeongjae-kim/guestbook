@@ -23,4 +23,8 @@ public class MentionResponse {
 
         return mentionResponse;
     }
+
+    public static Integer orderByCreatedAtDesc (MentionResponse a, MentionResponse b) {
+        return b.createdAt.isAfter(a.createdAt) ? 1 : -1;
+    }
 }

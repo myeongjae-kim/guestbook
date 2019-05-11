@@ -16,6 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Arrays;
+import java.util.List;
+
 import guestbook.mentions.api.dto.MentionRequest;
 import guestbook.mentions.api.dto.MentionResponse;
 import guestbook.mentions.exception.MentionNotFoundException;
@@ -56,6 +59,19 @@ class MentionControllerTest {
                 .andExpect(jsonPath("status").isNumber())
                 .andExpect(jsonPath("error").isNotEmpty())
                 .andExpect(jsonPath("message").isNotEmpty());
+    }
+
+    @Test
+    void getList_ValidInput_MentionResponses() throws Exception {
+        List<MentionResponse> mentionResponses = Arrays.asList(
+                getMentionResponseFixture(1),
+                getMentionResponseFixture(2)
+        );
+        given(mentionService.readAllMentions()).willReturn(mentionResponses);
+
+        mvc.perform(get("/list" ))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
     }
 
     @Test
