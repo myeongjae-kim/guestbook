@@ -1,0 +1,37 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier",
+    "tslint-sonarts"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "rules": {
+    "jsx-no-multiline-js": false,
+    "jsx-boolean-value": false,
+    "object-literal-sort-keys": false,
+    "no-bitwise": false,
+    "max-union-size": false,
+    "no-duplicate-string": false,
+    "no-redundant-boolean": false,
+    "no-duplicated-branches": false,
+    "only-arrow-functions": true,
+    "no-var-keyword": true,
+    "arrow-return-shorthand": true,
+    "no-boolean-literal-compare": true,
+    "switch-final-break": true,
+    "prefer-method-signature": true,
+    "ordered-imports": true,
+    "no-unused-variable": [
+      true,
+      {
+        "ignore-pattern": "^_"
+      }
+    ]
+  }
+}
