@@ -69,16 +69,15 @@ class MentionServiceTest {
 
     @Test
     void readAllMention_ValidInput_MentionResponseList() {
-        Iterable<Mention> allMentions = Arrays.asList(
+        List<Mention> allMentions = Arrays.asList(
                 getMentionFixture(1),
                 getMentionFixture(2)
         );
-        given(mentionRepository.findAll()).willReturn(allMentions);
+        given(mentionRepository.findAllByOrderByCreatedAtDesc()).willReturn(allMentions);
 
         List<MentionResponse> mentions = mentionService.readAllMentions();
         then(mentions)
                 .hasSize(2)
-                .isSorted()
                 .extracting("id")
                 .contains(1, 2);
     }

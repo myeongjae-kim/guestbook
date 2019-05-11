@@ -2,27 +2,31 @@ package guestbook.mentions.domain;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
-import guestbook.mentions.exception.MentionNotFoundException;
+import java.util.List;
+import java.util.stream.IntStream;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 @DataJpaTest
 public class MentionRepositoryTest {
-    @Autowired MentionRepository mentionRepository;
+    private @Autowired TestEntityManager testEntityManager;
+    private @Autowired MentionRepository mentionRepository;
 
     @Test
-    public void saveAndFindMention_ValidInput_SavedAndFoundMention() throws Exception {
-        Mention savedMention = mentionRepository.save(Mention.builder().name("name").content("content").build());
+    public void findAllMentions_ValidInput_MentionsOrderByCreatedAtDesc() {
+        final int sizeOfMentions = 1 << 12;
+        IntStream.range(0, sizeOfMentions).forEach((i) ->
+                testEntityManager.persist(Mention.builder().name("name").content("content").build()));
 
-        Mention foundMention = mentionRepository.findById(savedMention.getId())
-                .orElseThrow(() -> new MentionNotFoundException(savedMention.getId()));
+        List<Mention> mentions = mentionRepository.findAllByOrderByCreatedAtDesc();
 
-        then(foundMention)
-                .hasNoNullFieldsOrProperties()
-                .hasFieldOrPropertyWithValue("id", savedMention.getId())
-                .hasFieldOrPropertyWithValue("name", "name")
-                .hasFieldOrPropertyWithValue("content", "content")
-                .hasFieldOrProperty("createdAt");
+        then(mentions).hasSize(sizeOfMentions);
+
+        for (int i = 1; i < sizeOfMentions; i++) {
+           then(mentions.get(i-1).getCreatedAt()).isAfterOrEqualTo(mentions.get(i).getCreatedAt());
+        }
     }
 }
