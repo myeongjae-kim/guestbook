@@ -7,8 +7,12 @@ import guestbook.mentions.domain.Mention;
 import org.junit.jupiter.api.Test;
 
 public class MentionResponseTest {
+    public static MentionResponse getMentionResponseFixture(Integer id) {
+        return MentionResponse.of(getMentionFixture(id));
+    }
+
     public static MentionResponse getMentionResponseFixture() {
-        return MentionResponse.of(getMentionFixture());
+        return MentionResponse.of(getMentionFixture(1));
     }
 
     @Test

@@ -1,6 +1,9 @@
 package guestbook.mentions.domain;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
 
-public interface MentionRepository extends CrudRepository<Mention, Integer> {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MentionRepository extends JpaRepository<Mention, Integer> {
+    List<Mention> findAllByOrderByCreatedAtDesc();
 }
