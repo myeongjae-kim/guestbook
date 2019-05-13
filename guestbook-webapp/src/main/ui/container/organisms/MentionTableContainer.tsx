@@ -11,7 +11,12 @@ export interface IState {
 
 class MentionTableContainer extends React.Component<{}, IState> {
   public state = {
-    mentions: [],
+    mentions: [{
+      id: -1,
+      name: "John Doe",
+      content: "Lorem Ipsum",
+      createdAt: (new Date()).toDateString()
+    }] as IMentionResponse[],
     pending: false,
     rejected: false
   }
@@ -22,9 +27,9 @@ class MentionTableContainer extends React.Component<{}, IState> {
   }
 
   public render() {
-    const { mentions, pending, rejected } = this.state;
+    const { mentions, pending } = this.state;
     return <div style={{ opacity: pending ? 0.5 : 'initial' }}>
-      {rejected ? "서버와 연결할 수 없습니다." : <MentionTable mentions={mentions} />}
+      <MentionTable mentions={mentions} />
     </div>
   }
 

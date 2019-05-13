@@ -1,21 +1,14 @@
 import * as React from 'react';
-import withStyles, { WithStyles } from 'react-jss';
+import { Table } from 'semantic-ui-react';
 
-const styles = {
-  tableHeader: {
-    display: 'flex'
-  }
-}
+const MentionTableHeader: React.FC = () =>
+  <Table.Header>
+    <Table.Row>
+      <Table.HeaderCell>ID</Table.HeaderCell>
+      <Table.HeaderCell>이름</Table.HeaderCell>
+      <Table.HeaderCell>내용</Table.HeaderCell>
+      <Table.HeaderCell>작성일시</Table.HeaderCell>
+    </Table.Row>
+  </Table.Header>
 
-interface IProps extends WithStyles<typeof styles> { }
-
-const MentionTableHeader: React.FC<IProps> = ({ classes }) => {
-  return <div className={classes.tableHeader}>
-    <div>ID</div>
-    <div>이름</div>
-    <div>내용</div>
-    <div>작성일시</div>
-  </div>;
-}
-
-export default withStyles(styles)(MentionTableHeader);
+export default MentionTableHeader;

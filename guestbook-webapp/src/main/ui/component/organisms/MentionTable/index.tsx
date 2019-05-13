@@ -1,26 +1,17 @@
 import IMentionResponse from 'main/api/mentions/dto/IMentionResponse';
 import * as React from 'react';
-import withStyles, { WithStyles } from 'react-jss';
+import { Table } from 'semantic-ui-react';
+import MentionTableBody from './MentionTableBody';
 import MentionTableHeader from './MentionTableHeader';
-import MentionTableRow from './MentionTableRow';
 
-const styles = {
-  tableWrapper: {
-    width: 500,
-    height: 500
-  }
-}
-
-interface IProps extends WithStyles<typeof styles> {
+interface IProps {
   mentions: IMentionResponse[]
 }
 
-const MentionTable: React.FC<IProps> = ({ classes, mentions }) =>
-  <div className={classes.tableWrapper}>
+const MentionTable: React.FC<IProps> = ({ mentions }) =>
+  <Table singleLine>
     <MentionTableHeader />
-    {mentions.map((mention, index) =>
-      <MentionTableRow mention={mention} key={index} />
-    )}
-  </div>
+    <MentionTableBody mentions={mentions} />
+  </Table>
 
-export default withStyles(styles)(MentionTable);
+export default MentionTable;
