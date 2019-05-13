@@ -2,7 +2,9 @@ import Home from 'main/ui/component/templates/Home';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import withStyles from 'react-jss';
+import 'semantic-ui-css/semantic.min.css'
 import * as serviceWorker from './serviceWorker';
+
 
 const styles = {
   '@global': {
@@ -13,12 +15,22 @@ const styles = {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif`,
       "-webkit-font-smoothing": "antialiased",
-      "-moz-osx-font-smoothing": "grayscale"
+      "-moz-osx-font-smoothing": "grayscale",
+      backgroundColor: "#fafafa"
     },
 
     code: {
       fontFamily: `source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace`
+    },
+
+    "::-moz-selection": {
+      backgroundColor: "#2ac1bc",
+      color: "#fff"
+    },
+    "::selection": {
+      backgroundColor: "#2ac1bc",
+      color: "#fff"
     }
   }
 }

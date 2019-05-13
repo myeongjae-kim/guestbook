@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import guestbook.mentions.api.dto.MentionRequest;
 import guestbook.mentions.api.dto.MentionResponse;
 import guestbook.mentions.service.MentionService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping
+@CrossOrigin
 public class MentionController {
     private MentionService mentionService;
 
@@ -34,7 +36,7 @@ public class MentionController {
         return mentionService.readMention(id);
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public List<MentionResponse> readAllMentions() {
         return mentionService.readAllMentions();
     }
