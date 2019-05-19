@@ -23,7 +23,7 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleInvalidParam(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage() + ".")
+                .map(fieldError -> fieldError.getField() + " 필드가 " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining("\n"));
 
         return new ApiError(HttpStatus.BAD_REQUEST, message);

@@ -1,3 +1,4 @@
+import MentionAddFormContainer from 'main/ui/container/organisms/MentionAddFormContainer';
 import MentionTableContainer from 'main/ui/container/organisms/MentionTableContainer';
 import React from 'react';
 import withStyles, { WithStyles } from "react-jss";
@@ -41,6 +42,9 @@ const Home: React.FC<IProps> = ({ classes }: IProps) =>
         <span className={classes.moonEmoji} role="img" aria-label="moon">🌕</span>
       </span>
     </header>
+    <div className={classes.tableWrapper}>
+      <MentionAddFormContainer />
+    </div>
     <div className={classes.tableWrapper}>
       <MentionTableContainer />
     </div>
