@@ -1,11 +1,12 @@
 import IMentionRequest from 'main/api/mentions/dto/IMentionRequest';
 import IMentionResponse from 'main/api/mentions/dto/IMentionResponse';
-import MentionEditForm from 'main/ui/component/organisms/MentionEditForm';
+import MentionEditForm from 'main/ui/component/organisms/MentionTable/row/MentionEditForm';
 import { IRootState } from 'main/ui/modules';
 import * as editFormModule from 'main/ui/modules/mentions/edit-form';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { TextAreaProps } from 'semantic-ui-react';
 
 interface IProps {
   oldMention: IMentionResponse
@@ -61,11 +62,11 @@ class MentionEditFormContainer extends React.Component<IProps, IState> {
     })
   }
 
-  private changeContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private changeContent = (_: React.FormEvent<HTMLTextAreaElement>, data: TextAreaProps) => {
     this.setState({
       mentionRequest: {
         ...this.state.mentionRequest,
-        content: e.target.value,
+        content: data.value as string,
       }
     })
   }

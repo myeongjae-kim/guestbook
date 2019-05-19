@@ -5,7 +5,8 @@ import withStyles, { WithStyles } from "react-jss";
 
 const styles = {
   home: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: 40
   },
   header: {
     fontSize: 60,

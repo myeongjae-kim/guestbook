@@ -3,7 +3,7 @@ import IMentionResponse from 'main/api/mentions/dto/IMentionResponse';
 import * as React from 'react';
 import { ChangeEvent } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-import { Button, Input, Table } from 'semantic-ui-react';
+import { Button, Form, Input, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 
 const styles = {
   tableFont: {
@@ -27,7 +27,7 @@ interface IProps extends WithStyles<typeof styles> {
   mentionRequest: IMentionRequest
   putMention(): void
   changeName(e: ChangeEvent<HTMLInputElement>): void
-  changeContent(e: ChangeEvent<HTMLInputElement>): void
+  changeContent(_: React.FormEvent<HTMLTextAreaElement>, data: TextAreaProps): void
 }
 
 const MentionEditForm: React.FC<IProps> = ({
@@ -42,9 +42,15 @@ const MentionEditForm: React.FC<IProps> = ({
   return <Table.Row>
     <Table.Cell>{oldMention.id}</Table.Cell>
     <Table.Cell><Input className={classes.nameInput} value={name} onChange={changeName} /></Table.Cell>
-    <Table.Cell><Input className={classes.contentInput} value={content} onChange={changeContent} /></Table.Cell>
+    <Table.Cell>
+      <Form>
+        <TextArea className={classes.contentInput} value={content} onChange={changeContent} />
+      </Form>
+    </Table.Cell>
     <Table.Cell>{oldMention.createdAt}</Table.Cell>
-    <Table.Cell><Button icon="check" onClick={putMention} /></Table.Cell>
+    <Table.Cell textAlign="center">
+      <Button icon="check" onClick={putMention} />
+    </Table.Cell>
   </Table.Row>
 }
 
