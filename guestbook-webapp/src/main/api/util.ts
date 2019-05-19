@@ -1,10 +1,17 @@
-export const throwErrorIfStatusIsNotOk = async (res: Response): Promise<Response> => {
-  if (res.ok) {
-    return res
-  }
+import IErrorFromGuestbookAPI from "./IErrorFromGuestbookAPI";
 
-  throw res.json()
+export const returnBodyAs = async <T>(res: Response) => res.json() as Promise<T>
+export const returnBodyAsNumber = async (res: Response) => parseInt(await res.text(), 10)
+
+export const alertError = (e: IErrorFromGuestbookAPI | Error): void => {
+  if (e instanceof Error) {
+    alert(e)
+  } else {
+    alert(errorToString(e))
+  }
 }
 
-export const returnBodyAsJSON = async (res: Response) => res.json()
-export const returnBodyAsNumber = async (res: Response) => parseInt(await res.text(), 10)
+const errorToString = ({ status, error, message, timestamp }: IErrorFromGuestbookAPI) => `Error: ${error}
+Status: ${status}
+Message: ${message}
+Timestamp: ${timestamp}`

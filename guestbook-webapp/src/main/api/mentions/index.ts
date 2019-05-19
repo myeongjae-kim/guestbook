@@ -1,22 +1,22 @@
-import { alertError } from "../IError";
-import { returnBodyAsJSON, returnBodyAsNumber, throwErrorIfStatusIsNotOk } from "../util";
+import { format } from 'date-fns'
+import * as ko from 'date-fns/locale/ko'
+import { MENTION_API_DOMAIN } from "../common";
+import { returnBodyAs, returnBodyAsNumber } from "../util";
 import IMentionRequest from "./dto/IMentionRequest";
 import IMentionResponse from "./dto/IMentionResponse";
 
-export const get = (id: number): Promise<IMentionResponse | undefined> =>
-  fetch(`http://localhost:8080/${id}`)
-    .then(throwErrorIfStatusIsNotOk)
-    .then(returnBodyAsJSON)
-    .catch(alertError)
+export const get = (id: number): Promise<IMentionResponse> =>
+  fetch(`${MENTION_API_DOMAIN}/${id}`)
+    .then(res => returnBodyAs<IMentionResponse>(res))
+    .then(formatCreatedAt)
 
-export const getList = (): Promise<IMentionResponse[] | undefined> =>
-  fetch(`http://localhost:8080`)
-    .then(throwErrorIfStatusIsNotOk)
-    .then(returnBodyAsJSON)
-    .catch(alertError)
+export const getList = (): Promise<IMentionResponse[]> =>
+  fetch(MENTION_API_DOMAIN)
+    .then(res => returnBodyAs<IMentionResponse[]>(res))
+    .then(mentions => mentions.map(formatCreatedAt))
 
-export const post = (requestBody: IMentionRequest): Promise<number | undefined> =>
-  fetch(`http://localhost:8080`, {
+export const post = (requestBody: IMentionRequest): Promise<number> =>
+  fetch(MENTION_API_DOMAIN, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -24,22 +24,25 @@ export const post = (requestBody: IMentionRequest): Promise<number | undefined> 
     },
     body: JSON.stringify(requestBody)
   })
-    .then(throwErrorIfStatusIsNotOk)
     .then(returnBodyAsNumber)
-    .catch(alertError)
 
 export const put = (id: number, requestBody: IMentionRequest): Promise<void> =>
-  fetch(`http://localhost:8080/${id}`, {
+  fetch(`${MENTION_API_DOMAIN}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(requestBody)
   })
-    .then(throwErrorIfStatusIsNotOk)
-    .catch(alertError)
+    .then(_ => { return })
 
 export const del = (id: number): Promise<void> =>
-  fetch(`http://localhost:8080/${id}`, { method: 'DELETE' })
-    .then(throwErrorIfStatusIsNotOk)
-    .catch(alertError)
+  fetch(`${MENTION_API_DOMAIN}/${id}`, { method: 'DELETE' })
+    .then(_ => { return })
+
+const formatCreatedAt = (mention: IMentionResponse) => ({
+  ...mention,
+  createdAt: toDateString(mention.createdAt)
+})
+
+const toDateString = (createdAt: string) => format(createdAt, "YYYY. MM. DD. (ddd)", { locale: ko })

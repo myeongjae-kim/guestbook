@@ -1,47 +1,39 @@
-import * as mentionAPI from 'main/api/mentions';
 import IMentionResponse from 'main/api/mentions/dto/IMentionResponse';
 import MentionTable from 'main/ui/component/organisms/MentionTable';
+import { IRootState } from 'main/ui/modules';
+import * as tableModule from 'main/ui/modules/mentions/table';
 import * as React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
-export interface IState {
+interface IProps {
   mentions: IMentionResponse[]
   pending: boolean
   rejected: boolean
+  dispatcher: typeof tableModule
 }
 
-class MentionTableContainer extends React.Component<{}, IState> {
-  public state = {
-    mentions: [{
-      id: -1,
-      name: "John Doe",
-      content: "Lorem Ipsum",
-      createdAt: (new Date()).toDateString()
-    }] as IMentionResponse[],
-    pending: false,
-    rejected: false
-  }
-
+class MentionTableContainer extends React.Component<IProps> {
   public async componentDidMount() {
-    this.beforeSendingRequest();
-    this.afterReceivingResponse(await mentionAPI.getList());
+    this.props.dispatcher.getMentionList()
   }
 
   public render() {
-    const { mentions, pending } = this.state;
+    const { mentions, pending } = this.props;
     return <div style={{ opacity: pending ? 0.5 : 'initial' }}>
       <MentionTable mentions={mentions} />
     </div>
   }
-
-  private beforeSendingRequest = () => this.setState({ pending: true, rejected: false })
-
-  private afterReceivingResponse = (mentions?: IMentionResponse[]) => {
-    if (mentions) {
-      this.setState({ mentions, pending: false, rejected: false })
-      return;
-    }
-    this.setState({ pending: false, rejected: true })
-  }
 }
 
-export default MentionTableContainer;
+const mapStateToProps = ({ mentions }: IRootState) => ({
+  mentions: mentions.table.get("mentions"),
+  pending: mentions.table.get("pending"),
+  rejected: mentions.table.get("rejected")
+})
+
+const mapDispatchToProps = (dispatch: Dispatch<tableModule.Action>) => ({
+  dispatcher: bindActionCreators(tableModule, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MentionTableContainer);
