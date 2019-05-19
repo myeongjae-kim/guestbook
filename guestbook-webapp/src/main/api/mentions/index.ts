@@ -1,22 +1,19 @@
 import { MENTION_API_DOMAIN } from "../common";
-import { alertError } from "../IError";
-import { returnBodyAsJSON, returnBodyAsNumber, throwErrorIfStatusIsNotOk } from "../util";
+import { returnBodyAs, returnBodyAsNumber, throwErrorWhenStatusIsNotOk } from "../util";
 import IMentionRequest from "./dto/IMentionRequest";
 import IMentionResponse from "./dto/IMentionResponse";
 
-export const get = (id: number): Promise<IMentionResponse | undefined> =>
+export const get = (id: number): Promise<IMentionResponse> =>
   fetch(`${MENTION_API_DOMAIN}/${id}`)
-    .then(throwErrorIfStatusIsNotOk)
-    .then(returnBodyAsJSON)
-    .catch(alertError)
+    .then(throwErrorWhenStatusIsNotOk)
+    .then(res => returnBodyAs<IMentionResponse>(res))
 
-export const getList = (): Promise<IMentionResponse[] | undefined> =>
+export const getList = (): Promise<IMentionResponse[]> =>
   fetch(MENTION_API_DOMAIN)
-    .then(throwErrorIfStatusIsNotOk)
-    .then(returnBodyAsJSON)
-    .catch(alertError)
+    .then(throwErrorWhenStatusIsNotOk)
+    .then(res => returnBodyAs<IMentionResponse[]>(res))
 
-export const post = (requestBody: IMentionRequest): Promise<number | undefined> =>
+export const post = (requestBody: IMentionRequest): Promise<number> =>
   fetch(MENTION_API_DOMAIN, {
     method: 'POST',
     headers: {
@@ -25,9 +22,8 @@ export const post = (requestBody: IMentionRequest): Promise<number | undefined> 
     },
     body: JSON.stringify(requestBody)
   })
-    .then(throwErrorIfStatusIsNotOk)
+    .then(throwErrorWhenStatusIsNotOk)
     .then(returnBodyAsNumber)
-    .catch(alertError)
 
 export const put = (id: number, requestBody: IMentionRequest): Promise<void> =>
   fetch(`${MENTION_API_DOMAIN}/${id}`, {
@@ -37,10 +33,10 @@ export const put = (id: number, requestBody: IMentionRequest): Promise<void> =>
     },
     body: JSON.stringify(requestBody)
   })
-    .then(throwErrorIfStatusIsNotOk)
-    .catch(alertError)
+    .then(throwErrorWhenStatusIsNotOk)
+    .then(_ => { return })
 
 export const del = (id: number): Promise<void> =>
   fetch(`${MENTION_API_DOMAIN}/${id}`, { method: 'DELETE' })
-    .then(throwErrorIfStatusIsNotOk)
-    .catch(alertError)
+    .then(throwErrorWhenStatusIsNotOk)
+    .then(_ => { return })

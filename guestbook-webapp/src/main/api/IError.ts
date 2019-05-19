@@ -5,8 +5,7 @@ export default interface IError {
   timestamp: string
 }
 
-export const alertError = async (e: Promise<IError>): Promise<any> => {
-  const { status, error, message, timestamp } = await e;
+export const alertError = ({ status, error, message, timestamp }: IError): void => {
   alert(`Error: ${error}
 Status: ${status}
 Message: ${message}
