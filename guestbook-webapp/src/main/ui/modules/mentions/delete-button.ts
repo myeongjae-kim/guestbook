@@ -8,7 +8,7 @@ import { ActionType, createAction, getType } from "typesafe-actions";
 export type State = Record<{
   pending: boolean;
   rejected: boolean;
-}>;
+}>
 
 export const deleteMention = createAction("@mentionDeleteButton/DELETE_MENTION",
   action => (id: number) => action(mentions.del(id)));

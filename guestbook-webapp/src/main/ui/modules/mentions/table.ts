@@ -9,7 +9,7 @@ export type State = Record<{
   mentions: IMentionResponse[];
   pending: boolean;
   rejected: boolean;
-}>;
+}>
 
 export const getMentionList = createAction("@mentionTable/GET_MENTION_LIST",
   action => () => action(mentions.getList()));
@@ -27,12 +27,7 @@ export type Action = ActionType<
 >
 
 const createInitialState = Record({
-  mentions: [{
-    id: -1,
-    name: "John Doe",
-    content: "Lorem Ipsum",
-    createdAt: (new Date()).toDateString()
-  }] as IMentionResponse[],
+  mentions: [] as IMentionResponse[],
   pending: false,
   rejected: false
 });
