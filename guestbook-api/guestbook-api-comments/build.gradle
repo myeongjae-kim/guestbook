@@ -1,0 +1,21 @@
+version '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor("org.projectlombok:lombok")
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
+    }
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testImplementation('org.mockito:mockito-junit-jupiter')
+    testImplementation('org.junit.jupiter:junit-jupiter-params')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine')
+
+    runtime 'com.h2database:h2'
+    runtime 'org.springframework.boot:spring-boot-devtools'
+}
