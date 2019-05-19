@@ -9,8 +9,9 @@ interface IProps {
 
 const MentionTableBody: React.FC<IProps> = ({ mentions }) =>
   <Table.Body>
-    {mentions.map((mention, index) =>
+    {mentions.map((mention, index) => <>
       <MentionTableRow mention={mention} key={index} />
+    </>
     )}
   </Table.Body>
 
