@@ -1,17 +1,19 @@
 import { format } from 'date-fns'
 import * as ko from 'date-fns/locale/ko'
 import { MENTION_API_DOMAIN } from "../common";
-import { returnBodyAs, returnBodyAsNumber } from "../util";
+import { returnBodyAs, returnBodyAsNumber, throwWhenStatusIsNotOk } from "../util";
 import IMentionRequest from "./dto/IMentionRequest";
 import IMentionResponse from "./dto/IMentionResponse";
 
 export const get = (id: number): Promise<IMentionResponse> =>
   fetch(`${MENTION_API_DOMAIN}/${id}`)
+    .then(throwWhenStatusIsNotOk)
     .then(res => returnBodyAs<IMentionResponse>(res))
     .then(formatCreatedAt)
 
 export const getList = (): Promise<IMentionResponse[]> =>
   fetch(MENTION_API_DOMAIN)
+    .then(throwWhenStatusIsNotOk)
     .then(res => returnBodyAs<IMentionResponse[]>(res))
     .then(mentions => mentions.map(formatCreatedAt))
 
@@ -24,6 +26,7 @@ export const post = (requestBody: IMentionRequest): Promise<number> =>
     },
     body: JSON.stringify(requestBody)
   })
+    .then(throwWhenStatusIsNotOk)
     .then(returnBodyAsNumber)
 
 export const put = (id: number, requestBody: IMentionRequest): Promise<void> =>
@@ -34,10 +37,12 @@ export const put = (id: number, requestBody: IMentionRequest): Promise<void> =>
     },
     body: JSON.stringify(requestBody)
   })
+    .then(throwWhenStatusIsNotOk)
     .then(_ => { return })
 
 export const del = (id: number): Promise<void> =>
   fetch(`${MENTION_API_DOMAIN}/${id}`, { method: 'DELETE' })
+    .then(throwWhenStatusIsNotOk)
     .then(_ => { return })
 
 const formatCreatedAt = (mention: IMentionResponse) => ({

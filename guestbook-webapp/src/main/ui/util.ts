@@ -1,6 +1,7 @@
 import { Middleware } from "redux";
 import { getType } from "typesafe-actions";
 import { isUndefined } from "util";
+import { postMentionFulfilled } from "./modules/mentions/add-form";
 import { deleteMentionFulfilled } from "./modules/mentions/delete-button";
 import { getMentionList } from "./modules/mentions/table";
 
@@ -10,7 +11,10 @@ const refreshTableAfterMentionCRUD: Middleware = api => next => action => {
     return next(action);
   }
 
-  if (getType(deleteMentionFulfilled) === type) {
+  if (
+    type === getType(deleteMentionFulfilled) ||
+    type === getType(postMentionFulfilled)
+  ) {
     api.dispatch(getMentionList())
   }
 
