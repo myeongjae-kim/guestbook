@@ -9,7 +9,7 @@ export type State = Record<{
   mentionRequest: IMentionRequest
   pending: boolean;
   rejected: boolean;
-}>;
+}>
 
 export const postMention = createAction("@mentionAddForm/POST_MENTION",
   action => (mentionRequest: IMentionRequest) => action(mentions.post(mentionRequest)));
