@@ -21,10 +21,13 @@ const styles = {
   },
   tableWrapper: {
     padding: 20,
-    maxWidth: 600,
+    maxWidth: 800,
     display: 'flex',
     justifyContent: 'center',
     margin: 'auto'
+  },
+  moonEmoji: {
+    marginLeft: 10
   }
 }
 
@@ -33,7 +36,10 @@ interface IProps extends WithStyles<typeof styles> { }
 const Home: React.FC<IProps> = ({ classes }: IProps) =>
   <div className={classes.home}>
     <header className={classes.header}>
-      <span className={classes.headerText} onClick={refresh}>달 방명록</span>
+      <span className={classes.headerText} onClick={refresh}>
+        달 방명록
+        <span className={classes.moonEmoji} role="img" aria-label="moon">🌕</span>
+      </span>
     </header>
     <div className={classes.tableWrapper}>
       <MentionTableContainer />
