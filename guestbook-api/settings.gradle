@@ -6,4 +6,6 @@ pluginManagement {
 rootProject.name = 'guestbook-api'
 include 'guestbook-api-mentions'
 include 'guestbook-api-common'
+include 'guestbook-api-comments'
+include 'guestbook-api-comments'
 
