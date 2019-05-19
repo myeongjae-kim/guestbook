@@ -28,8 +28,36 @@ subprojects {
 	}
 
 	jacocoTestReport {
+		afterEvaluate {
+            getClassDirectories().setFrom(classDirectories.files.collect {
+                fileTree(dir: it, exclude: ['**/*Application*', '**/*Config*'])
+            })
+        }
+
 		dependsOn test
 	}
+    
+	sourceSets {
+		integrationTest {
+			java {
+				compileClasspath += main.output
+				compileClasspath += main.compileClasspath
+				compileClasspath += test.output
+				compileClasspath += test.compileClasspath
+				runtimeClasspath += test.runtimeClasspath
+			}
+		}
+	}
+
+	task integrationTest(type: Test) {
+		group = 'verification'
+		testClassesDirs = sourceSets.integrationTest.output.classesDirs
+		classpath = sourceSets.integrationTest.runtimeClasspath
+
+		shouldRunAfter test
+		useJUnitPlatform()
+	}
+	check.dependsOn(integrationTest)
 }
 
 project(':guestbook-api-mentions') {
