@@ -3,7 +3,7 @@ import IMentionResponse from 'main/api/mentions/dto/IMentionResponse';
 import MentionTable from 'main/ui/component/organisms/MentionTable';
 import * as React from 'react';
 
-export interface IState {
+interface IState {
   mentions: IMentionResponse[]
   pending: boolean
   rejected: boolean

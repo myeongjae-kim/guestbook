@@ -1,0 +1,1 @@
+export const MENTION_API_DOMAIN = "http://localhost:8080"
