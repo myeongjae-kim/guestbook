@@ -69,7 +69,7 @@ class MentionControllerTest {
         );
         given(mentionService.readAllMentions()).willReturn(mentionResponses);
 
-        mvc.perform(get("/list" ))
+        mvc.perform(get("/" ))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
