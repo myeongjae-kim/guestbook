@@ -6,33 +6,26 @@ import { alertError } from "main/api/util";
 import { ActionType, createAction, getType } from "typesafe-actions";
 
 export type State = Record<{
-  mentions: IMentionResponse[];
   pending: boolean;
   rejected: boolean;
 }>;
 
-export const getMentionList = createAction("@mentionTable/GET_MENTION_LIST",
-  action => () => action(mentions.getList()));
-const getMentionListPending = createAction("@mentionTable/GET_MENTION_LIST_PENDING");
-const getMentionListFulfilled = createAction("@mentionTable/GET_MENTION_LIST_FULFILLED",
+export const deleteMention = createAction("@mentionDeleteButton/DELETE_MENTION",
+  action => (id: number) => action(mentions.del(id)));
+const deleteMentionPending = createAction("@mentionDeleteButton/DELETE_MENTION_PENDING");
+export const deleteMentionFulfilled = createAction("@mentionDeleteButton/DELETE_MENTION_FULFILLED",
   action => (mentionList: IMentionResponse[]) => action(mentionList));
-const getMentionListRejected = createAction("@mentionTable/GET_MENTION_LIST_REJECTED",
+const deleteMentionRejected = createAction("@mentionDeleteButton/DELETE_MENTION_REJECTED",
   action => (error: IErrorFromGuestbookAPI | Error) => action(error))
 
 export type Action = ActionType<
-  typeof getMentionList |
-  typeof getMentionListPending |
-  typeof getMentionListFulfilled |
-  typeof getMentionListRejected
+  typeof deleteMention |
+  typeof deleteMentionPending |
+  typeof deleteMentionFulfilled |
+  typeof deleteMentionRejected
 >
 
 const createInitialState = Record({
-  mentions: [{
-    id: -1,
-    name: "John Doe",
-    content: "Lorem Ipsum",
-    createdAt: (new Date()).toDateString()
-  }] as IMentionResponse[],
   pending: false,
   rejected: false
 });
@@ -42,14 +35,13 @@ export const reducer = (
   action: Action
 ): State => {
   switch (action.type) {
-    case getType(getMentionListPending):
+    case getType(deleteMentionPending):
       return state.set("pending", true);
-    case getType(getMentionListFulfilled):
+    case getType(deleteMentionFulfilled):
       return state.merge({
-        mentions: action.payload,
         pending: false
       });
-    case getType(getMentionListRejected):
+    case getType(deleteMentionRejected):
       alertError(action.payload);
       return state.merge({
         pending: false,
