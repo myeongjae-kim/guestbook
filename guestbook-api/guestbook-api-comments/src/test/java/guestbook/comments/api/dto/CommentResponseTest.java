@@ -7,8 +7,12 @@ import guestbook.comments.domain.Comment;
 import org.junit.jupiter.api.Test;
 
 public class CommentResponseTest {
+    public static CommentResponse getCommentResponseFixture(String id) {
+        return CommentResponse.of(getCommentFixture(id));
+    }
+
     public static CommentResponse getCommentResponseFixture() {
-        return CommentResponse.of(getCommentFixture());
+        return getCommentResponseFixture("comment id");
     }
 
     @Test
