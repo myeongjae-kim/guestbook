@@ -6,14 +6,18 @@ import static org.assertj.core.api.BDDAssertions.then;
 import org.junit.jupiter.api.Test;
 
 public class CommentTest {
-    public static Comment getCommentFixture() {
+    public static Comment getCommentFixture(String id) {
         Comment comment = Comment.builder()
                 .mentionId(1)
                 .content("content").build();
-        comment.setId("comment id");
+        comment.setId(id);
         comment.setCreatedAt(now());
 
         return comment;
+    }
+
+    public static Comment getCommentFixture() {
+        return getCommentFixture("comment id");
     }
 
     @Test
