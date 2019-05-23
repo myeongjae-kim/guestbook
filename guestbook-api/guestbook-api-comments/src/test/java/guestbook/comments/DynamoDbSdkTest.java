@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class DynamoDbSdkTest {
@@ -61,7 +62,7 @@ class DynamoDbSdkTest {
         item.put("deletedAt", (new AttributeValue()).withS("to be changed"));
     }
 
-    @Test
+    @Test @Disabled
     void createTable_SendCreateTableRequest_TableHasBeenCreated() {
         CreateTableRequest createTableRequest = (new CreateTableRequest())
                 .withAttributeDefinitions(
@@ -88,7 +89,7 @@ class DynamoDbSdkTest {
     }
 
 
-    @Test
+    @Test @Disabled
     void putItem() {
         PutItemRequest putItemRequest = (new PutItemRequest())
                 .withTableName("Comment")
@@ -98,7 +99,7 @@ class DynamoDbSdkTest {
         then(putItemResult.getSdkHttpMetadata().getHttpStatusCode()).isEqualTo(200);
     }
 
-    @Test
+    @Test @Disabled
     void getItem() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
@@ -112,7 +113,7 @@ class DynamoDbSdkTest {
         then(getItemResult.getItem()).containsAllEntriesOf(item);
     }
 
-    @Test
+    @Test @Disabled
     void deleteItem() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
@@ -126,7 +127,7 @@ class DynamoDbSdkTest {
         then(deleteItemResult.getSdkHttpMetadata().getHttpStatusCode()).isEqualTo(200);
     }
 
-    @Test
+    @Test @Disabled
     void getDeletedItem_ValidInput_NullItem() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
