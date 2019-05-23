@@ -8,6 +8,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.data:spring-data-commons'
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.11.557'
 
     testImplementation ('org.springframework.boot:spring-boot-starter-test') {
         exclude module: 'junit'
