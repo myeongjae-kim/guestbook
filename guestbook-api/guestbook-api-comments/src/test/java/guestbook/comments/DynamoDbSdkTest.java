@@ -63,7 +63,7 @@ class DynamoDbSdkTest {
     }
 
     @Test @Disabled
-    void createTable_SendCreateTableRequest_TableHasBeenCreated() {
+    void createTable_ValidInput_TableHasBeenCreated() {
         CreateTableRequest createTableRequest = (new CreateTableRequest())
                 .withAttributeDefinitions(
                         new AttributeDefinition("id", ScalarAttributeType.S),
@@ -88,9 +88,8 @@ class DynamoDbSdkTest {
         then(hasTableBeenCreated).isTrue();
     }
 
-
     @Test @Disabled
-    void putItem() {
+    void putItem_ShouldBeCalledAfterTableCreation_StatusOk() {
         PutItemRequest putItemRequest = (new PutItemRequest())
                 .withTableName("Comment")
                 .withItem(item);
@@ -100,7 +99,7 @@ class DynamoDbSdkTest {
     }
 
     @Test @Disabled
-    void getItem() {
+    void getItem_ShouldBeCalledAfterPuttingItem_FoundItem() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
 
@@ -114,7 +113,7 @@ class DynamoDbSdkTest {
     }
 
     @Test @Disabled
-    void deleteItem() {
+    void deleteItem_ShouldBeCalledAfterPuttingItem_StatsOk() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
 
@@ -128,7 +127,7 @@ class DynamoDbSdkTest {
     }
 
     @Test @Disabled
-    void getDeletedItem_ValidInput_NullItem() {
+    void getItem_ShouldBeCalledAfterDeletingItem_NullItem() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
 
