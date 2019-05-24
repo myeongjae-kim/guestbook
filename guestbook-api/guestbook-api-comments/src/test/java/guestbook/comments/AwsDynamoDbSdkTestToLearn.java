@@ -34,7 +34,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-class DynamoDbSdkTest {
+class AwsDynamoDbSdkTestToLearn {
     private AWSCredentials awsCredentials;
     private AWSCredentialsProvider awsCredentialsProvider;
     private AmazonDynamoDB amazonDynamoDB;
