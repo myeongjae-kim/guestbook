@@ -14,19 +14,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import guestbook.comments.api.dto.CommentRequest;
+import guestbook.comments.api.dto.CommentPostRequest;
 import guestbook.comments.api.dto.CommentResponse;
+import guestbook.comments.exception.CommentNotFoundException;
 import guestbook.comments.service.CommentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -50,30 +49,48 @@ class CommentControllerTest {
     }
 
     @Test
+    void readComment_NonExistentId_StatusNotFound() throws Exception {
+        given(commentService.readComment(anyString())).willThrow(new CommentNotFoundException("comment id"));
+
+        this.mvc.perform(get("/{id}", "non-existent-id"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void readComments_WithMentionId_ValidOutput() throws Exception {
-        Page<CommentResponse> comments = new PageImpl<>(IntStream.range(0, 10)
+        List<CommentResponse> comments = IntStream.range(0, 10)
                 .mapToObj(i -> getCommentResponseFixture("comment id " + i))
-                .collect(Collectors.toList()));
-        given(commentService.readCommentsByMentionId(any(Pageable.class), anyInt())).willReturn(comments);
+                .collect(Collectors.toList());
+        given(commentService.readCommentsOf(anyInt())).willReturn(comments);
 
         this.mvc.perform(get("/mention/{mentionId}", 1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(10));
+                .andExpect(jsonPath("$.length()").value(10));
     }
 
     @Test
     void createComment_ValidInput_ValidOutput() throws Exception {
-        CommentRequest commentRequest = new CommentRequest();
-        commentRequest.setMentionId(1);
-        commentRequest.setContent("content");
+        CommentPostRequest commentPostRequest = new CommentPostRequest();
+        commentPostRequest.setMentionId(1);
+        commentPostRequest.setContent("content");
 
-        given(commentService.createComment(any(CommentRequest.class))).willReturn("comment id");
+        given(commentService.createComment(any(CommentPostRequest.class))).willReturn("comment id");
 
         this.mvc.perform(post("/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(commentRequest)))
+                .content(objectMapper.writeValueAsString(commentPostRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("comment id"));
+    }
+
+    @Test
+    void createComment_NullField_ThrowException() throws Exception {
+        CommentPostRequest commentPostRequest = new CommentPostRequest();
+
+        this.mvc.perform(post("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(commentPostRequest)))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -81,13 +98,13 @@ class CommentControllerTest {
         CommentResponse commentResponse = getCommentResponseFixture();
         given(commentService.readComment(anyString())).willReturn(commentResponse);
 
-        CommentRequest commentRequest = new CommentRequest();
-        commentRequest.setMentionId(1);
-        commentRequest.setContent("modified content");
+        CommentPostRequest commentPostRequest = new CommentPostRequest();
+        commentPostRequest.setMentionId(1);
+        commentPostRequest.setContent("modified content");
 
         this.mvc.perform(put("/{id}", "comment id")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(commentRequest)))
+                .content(objectMapper.writeValueAsString(commentPostRequest)))
                 .andExpect(status().isOk());
     }
 

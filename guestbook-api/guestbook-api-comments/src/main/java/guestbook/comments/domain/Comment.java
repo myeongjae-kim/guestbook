@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
+@Setter // Setters are used in spring-data-dynamodb
 @NoArgsConstructor
 @DynamoDBTable(tableName = "Comment")
 public class Comment {
@@ -37,7 +37,7 @@ public class Comment {
     @DynamoDBTyped(DynamoDBAttributeType.BOOL)
     private boolean deleted;
     @DynamoDBAttribute
-    @DynamoDBIndexRangeKey(globalSecondaryIndexNames = "byMentionId")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "byMentionId")
     @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
     @DynamoDBAttribute
@@ -48,6 +48,7 @@ public class Comment {
     public Comment(Integer mentionId, String content) {
         this.mentionId = mentionId;
         this.content = content;
+        this.createdAt = now();
         this.deleted = false;
     }
 

@@ -1,4 +1,4 @@
-package guestbook.mentions.exception;
+package guestbook.comments.exception;
 
 import guestbook.common.dto.ApiError;
 import guestbook.common.exception.CommonExceptionController;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 @ResponseBody
 public class ExceptionController {
-    @ExceptionHandler(MentionNotFoundException.class)
+    @ExceptionHandler(CommentNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFound(RuntimeException e) {
         return CommonExceptionController.handleNotFound(e);

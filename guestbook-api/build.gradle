@@ -65,3 +65,9 @@ project(':guestbook-api-mentions') {
 		implementation project(':guestbook-api-common')
 	}
 }
+
+project(':guestbook-api-comments') {
+	dependencies {
+		implementation project(':guestbook-api-common')
+	}
+}

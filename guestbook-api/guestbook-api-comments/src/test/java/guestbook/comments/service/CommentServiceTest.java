@@ -7,12 +7,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import guestbook.comments.api.dto.CommentRequest;
+import guestbook.comments.api.dto.CommentPostRequest;
+import guestbook.comments.api.dto.CommentPutRequest;
 import guestbook.comments.api.dto.CommentResponse;
 import guestbook.comments.domain.Comment;
 import guestbook.comments.domain.CommentRepository;
@@ -22,10 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
@@ -57,14 +54,13 @@ class CommentServiceTest {
     @Test
     void readComments_WithMentionId_FoundComments() {
         // given
-        Page<Comment> comments = new PageImpl<>(Arrays.asList(
+        List<Comment> comments = Arrays.asList(
                 getCommentFixture("comment id 1"),
-                getCommentFixture("comment id 2")));
-        given(commentRepository.findAllByMentionId(any(Pageable.class), anyInt())).willReturn(comments);
+                getCommentFixture("comment id 2"));
+        given(commentRepository.findAllByMentionIdOrderByCreatedAtDesc(anyInt())).willReturn(comments);
 
         // when
-        Page<CommentResponse> foundComments = commentService.readCommentsByMentionId(
-                PageRequest.of(1, 10, DESC, "createdAt"), 1);
+        List<CommentResponse> foundComments = commentService.readCommentsOf(1);
 
         // then
         then(foundComments).extracting("id")
@@ -84,12 +80,12 @@ class CommentServiceTest {
         // given
         Comment comment = getCommentFixture();
         given(commentRepository.save(any(Comment.class))).willReturn(comment);
-        CommentRequest commentRequest = new CommentRequest();
-        commentRequest.setMentionId(1);
-        commentRequest.setContent("content");
+        CommentPostRequest commentPostRequest = new CommentPostRequest();
+        commentPostRequest.setMentionId(1);
+        commentPostRequest.setContent("content");
 
         // when
-        String id = commentService.createComment(commentRequest);
+        String id = commentService.createComment(commentPostRequest);
 
         // then
         then(id).isNotEmpty();
@@ -104,12 +100,11 @@ class CommentServiceTest {
         given(commentRepository.findById(anyString())).willReturn(Optional.of(updatedComment));
         given(commentRepository.save(any(Comment.class))).willReturn(updatedComment);
 
-        CommentRequest commentRequest = new CommentRequest();
-        commentRequest.setMentionId(1);
-        commentRequest.setContent(updatedComment.getContent());
+        CommentPutRequest commentPutRequest = new CommentPutRequest();
+        commentPutRequest.setContent(updatedComment.getContent());
 
         // when
-        commentService.updateComment(id, commentRequest);
+        commentService.updateComment(id, commentPutRequest);
 
         // then
         CommentResponse commentResponse = commentService.readComment(id);
