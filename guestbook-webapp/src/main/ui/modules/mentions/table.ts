@@ -3,6 +3,7 @@ import IErrorFromGuestbookAPI from "main/api/IErrorFromGuestbookAPI";
 import * as mentions from "main/api/mentions"
 import IMentionResponse from "main/api/mentions/dto/IMentionResponse";
 import { alertError } from "main/api/util";
+import { call, put, takeEvery } from "redux-saga/effects";
 import { ActionType, createAction, getType } from "typesafe-actions";
 
 export type State = Record<{
@@ -53,5 +54,19 @@ export const reducer = (
 
     default:
       return state.merge({});
+  }
+}
+
+export function* saga() {
+  yield takeEvery(getType(getMentionList), sagaGetMentionList);
+}
+
+function* sagaGetMentionList() {
+  yield put(getMentionListPending())
+  try {
+    const mentionList: IMentionResponse[] = yield call(mentions.getList);
+    yield put(getMentionListFulfilled(mentionList));
+  } catch (e) {
+    yield put(getMentionListRejected(e));
   }
 }
