@@ -5,7 +5,6 @@ import static guestbook.mentions.api.dto.MentionResponseTest.getMentionResponseF
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,7 +50,7 @@ class MentionControllerTest {
 
     @Test
     void get_NonExistentId_ApiError() throws Exception {
-        when(mentionService.readMention(anyInt())).thenThrow(new MentionNotFoundException(1));
+        given(mentionService.readMention(anyInt())).willThrow(new MentionNotFoundException(1));
 
         mvc.perform(get("/{id}", 1))
                 .andExpect(status().isNotFound())

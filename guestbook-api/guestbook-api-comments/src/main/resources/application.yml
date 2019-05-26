@@ -1,3 +1,5 @@
+server:
+  port: 8081
 amazon:
   dynamodb:
     endpoint: "http://localhost:8000"

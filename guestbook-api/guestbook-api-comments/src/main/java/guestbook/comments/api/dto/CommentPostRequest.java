@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CommentRequest {
+public class CommentPostRequest {
     private @NotNull Integer mentionId;
     private @NotNull String content;
 }
