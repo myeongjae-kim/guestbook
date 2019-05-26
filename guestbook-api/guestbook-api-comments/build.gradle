@@ -28,7 +28,17 @@ dependencies {
     runtime 'org.springframework.boot:spring-boot-devtools'
 }
 
-task createCommentTable (type:Exec) {
+task dockerComposeUp(type: Exec) {
+    group = 'dynamodb'
+    commandLine "bash", "-c", "docker-compose up -d"
+}
+
+task dockerComposeDown(type: Exec) {
+    group = 'dynamodb'
+    commandLine "bash", "-c", "docker-compose down"
+}
+
+task createCommentTable (type: Exec) {
     group = 'dynamodb'
     commandLine "bash", "-c",\
         'aws dynamodb create-table \
@@ -55,7 +65,7 @@ ProvisionedThroughput="{\
 }"'
 }
 
-task deleteCommentTable (type:Exec) {
+task deleteCommentTable (type: Exec) {
     group = 'dynamodb'
     commandLine "bash", "-c",\
         'aws dynamodb delete-table \
@@ -63,5 +73,14 @@ task deleteCommentTable (type:Exec) {
             --table-name "Comment"'
 }
 
+createCommentTable.dependsOn dockerComposeUp
 bootRun.dependsOn createCommentTable
+
 bootRun.finalizedBy deleteCommentTable
+deleteCommentTable.finalizedBy dockerComposeDown
+
+test.dependsOn dockerComposeUp
+test.finalizedBy dockerComposeDown
+
+integrationTest.dependsOn dockerComposeUp
+integrationTest.finalizedBy dockerComposeDown
