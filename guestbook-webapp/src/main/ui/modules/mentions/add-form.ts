@@ -3,7 +3,9 @@ import IErrorFromGuestbookAPI from "main/api/IErrorFromGuestbookAPI";
 import * as mentions from "main/api/mentions"
 import IMentionRequest from "main/api/mentions/dto/IMentionRequest";
 import { alertError } from "main/api/util";
+import { call, put, takeEvery } from "redux-saga/effects";
 import { ActionType, createAction, getType } from "typesafe-actions";
+import { getMentionList } from "./table";
 
 export type State = Record<{
   mentionRequest: IMentionRequest
@@ -12,9 +14,9 @@ export type State = Record<{
 }>
 
 export const postMention = createAction("@mentionAddForm/POST_MENTION",
-  action => (mentionRequest: IMentionRequest) => action(mentions.post(mentionRequest)));
+  action => (mentionRequest: IMentionRequest) => action({ mentionRequest }));
 const postMentionPending = createAction("@mentionAddForm/POST_MENTION_PENDING");
-export const postMentionFulfilled = createAction("@mentionAddForm/POST_MENTION_FULFILLED");
+const postMentionFulfilled = createAction("@mentionAddForm/POST_MENTION_FULFILLED");
 const postMentionRejected = createAction("@mentionAddForm/POST_MENTION_REJECTED",
   action => (error: IErrorFromGuestbookAPI | Error) => action(error))
 
@@ -72,5 +74,21 @@ export const reducer = (
 
     default:
       return state.merge({});
+  }
+}
+
+export function* saga() {
+  yield takeEvery(getType(postMention), sagaPostMention);
+}
+
+function* sagaPostMention(action: ActionType<typeof postMention>) {
+  yield put(postMentionPending())
+  try {
+    const { mentionRequest } = action.payload
+    yield call(mentions.post, mentionRequest);
+    yield put(postMentionFulfilled());
+    yield put(getMentionList());
+  } catch (e) {
+    yield put(postMentionRejected(e));
   }
 }

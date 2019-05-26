@@ -1,13 +1,12 @@
+import createSagaMiddleware from "@redux-saga/core";
 import Home from 'main/ui/component/templates/Home';
-import { rootReducer } from 'main/ui/modules';
-import refreshTableAfterMentionCRUD from 'main/ui/util';
+import { IRootState, rootReducer, rootSaga } from 'main/ui/modules';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import withStyles from 'react-jss';
 import { Provider as ReduxStoreProvider } from "react-redux";
-import { applyMiddleware, createStore } from 'redux';
-import { createPromise } from 'redux-promise-middleware';
-import 'semantic-ui-css/semantic.min.css'
+import { AnyAction, applyMiddleware, createStore, Store } from 'redux';
+import 'semantic-ui-css/semantic.min.css';
 import * as serviceWorker from './serviceWorker';
 
 const styles = {
@@ -40,21 +39,22 @@ const styles = {
 }
 
 const store = (() => {
-  const promiseMiddleware = createPromise();
+  const sagaMiddleware = createSagaMiddleware();
+
+  let reduxStore: Store<IRootState, AnyAction>;
   if (process.env.NODE_ENV === "development") {
     const { composeWithDevTools } = require('redux-devtools-extension');
     const { createLogger } = require('redux-logger');
 
     const logger = createLogger();
-    return createStore(rootReducer, composeWithDevTools(applyMiddleware(
-      logger,
-      promiseMiddleware,
-      refreshTableAfterMentionCRUD)));
+    reduxStore = createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, sagaMiddleware)));
   } else {
-    return createStore(rootReducer, applyMiddleware(
-      promiseMiddleware,
-      refreshTableAfterMentionCRUD));
+    reduxStore = createStore(rootReducer, applyMiddleware(sagaMiddleware));
   }
+
+  sagaMiddleware.run(rootSaga);
+
+  return reduxStore;
 })();
 
 
