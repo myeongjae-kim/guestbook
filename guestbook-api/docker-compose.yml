@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  dynamodb:
+    container_name: dynamodb
+    image: amazon/dynamodb-local:latest
+    ports:
+      - 8000:8000
+    restart: always
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
