@@ -40,47 +40,24 @@ task dockerComposeDown(type: Exec) {
 
 task createCommentTable (type: Exec) {
     group = 'dynamodb'
-    commandLine "bash", "-c",\
-        'aws dynamodb create-table \
-            --endpoint-url http://localhost:8000 \
-            --table-name Comment \
-            --attribute-definitions \
-                AttributeName=id,AttributeType=S \
-                AttributeName=mentionId,AttributeType=N \
-                AttributeName=createdAt,AttributeType=S \
-            --key-schema AttributeName=id,KeyType=HASH \
-            --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
-            --global-secondary-indexes IndexName=byMentionId,\
-KeySchema=["{\
-  AttributeName=mentionId,\
-  KeyType=HASH\
-}","{\
-  AttributeName=createdAt,\
-  KeyType=RANGE\
-}"],\
-Projection="{ProjectionType=ALL}",\
-ProvisionedThroughput="{\
-  ReadCapacityUnits=1,\
-  WriteCapacityUnits=1\
-}"'
+    commandLine "bash", "-c", "sleep 3; bash src/main/resources/scripts/create-comment-table.sh"
 }
 
 task deleteCommentTable (type: Exec) {
     group = 'dynamodb'
-    commandLine "bash", "-c",\
-        'aws dynamodb delete-table \
-            --endpoint-url http://localhost:8000\
-            --table-name "Comment"'
+    commandLine "bash", "src/main/resources/scripts/delete-comment-table.sh"
 }
 
 createCommentTable.dependsOn dockerComposeUp
-bootRun.dependsOn createCommentTable
-
-bootRun.finalizedBy deleteCommentTable
 deleteCommentTable.finalizedBy dockerComposeDown
 
-test.dependsOn dockerComposeUp
-test.finalizedBy dockerComposeDown
+if (System.env['GUESTBOOK_REMOTE'] == null) {
+    bootRun.dependsOn createCommentTable
+    bootRun.finalizedBy deleteCommentTable
 
-integrationTest.dependsOn dockerComposeUp
-integrationTest.finalizedBy dockerComposeDown
+    test.dependsOn createCommentTable
+    test.finalizedBy deleteCommentTable
+
+    integrationTest.dependsOn createCommentTable
+    integrationTest.finalizedBy deleteCommentTable
+}

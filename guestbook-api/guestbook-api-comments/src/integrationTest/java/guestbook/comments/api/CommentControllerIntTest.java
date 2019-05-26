@@ -10,8 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -21,8 +19,6 @@ import java.util.stream.IntStream;
 import guestbook.comments.CommentsApiApplication;
 import guestbook.comments.api.dto.CommentPostRequest;
 import guestbook.comments.api.dto.CommentPutRequest;
-import guestbook.comments.domain.CommentRepositoryTest;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,23 +40,17 @@ import org.springframework.web.client.RestTemplate;
 class CommentControllerIntTest {
     private @Autowired MockMvc mvc;
     private @Autowired ObjectMapper objectMapper;
-    private @Autowired DynamoDBMapper dynamoDbMapper;
-    private @Autowired AmazonDynamoDB amazonDynamoDb;
     private @LocalServerPort Integer randomServerPort;
+    private int uniqueMentionId;
 
     @BeforeEach
-    void createTable() {
-        CommentRepositoryTest.createTable(amazonDynamoDb, dynamoDbMapper);
-    }
-
-    @AfterEach
-    void deleteTable() {
-        CommentRepositoryTest.deleteTable(amazonDynamoDb, dynamoDbMapper);
+    void createUniqueMentionId() {
+        uniqueMentionId = (new Random()).nextInt(1 << 31 - 1);
     }
 
     @Test
     void readComment_ValidInput_ValidOutput() throws Exception {
-        String id = createCommentAndReturnId();
+        String id = createCommentAndReturnId(uniqueMentionId);
         this.mvc.perform(get("/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
@@ -71,13 +61,12 @@ class CommentControllerIntTest {
 
     @Test
     void readComments_WithMentionId_ValidOutput() throws Exception {
-        final int mentionId = (new Random()).nextInt(1 << 31 - 1);
         final int size = 10;
         List<String> ids = IntStream.range(0, size)
-                .mapToObj(i -> createCommentAndReturnId(mentionId, "arbitrary content"))
+                .mapToObj(i -> createCommentAndReturnId(uniqueMentionId, "arbitrary content"))
                 .collect(toList());
 
-        MvcResult result = this.mvc.perform(get("/mention/{mentionId}", mentionId))
+        MvcResult result = this.mvc.perform(get("/mention/{mentionId}", uniqueMentionId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(size))
                 .andReturn();
@@ -101,7 +90,7 @@ class CommentControllerIntTest {
 
     @Test
     void updateComment_ValidInput_ValidOutput() throws Exception {
-        String id = createCommentAndReturnId();
+        String id = createCommentAndReturnId(uniqueMentionId);
 
         CommentPutRequest commentPutRequest = new CommentPutRequest();
         String modifiedContent = "modified content";
@@ -122,7 +111,7 @@ class CommentControllerIntTest {
 
     @Test
     void deleteComment_ValidInput_ValidOutput() throws Exception {
-        String id = createCommentAndReturnId();
+        String id = createCommentAndReturnId(uniqueMentionId);
 
         this.mvc.perform(delete("/{id}", id))
                 .andExpect(status().isOk());
@@ -131,8 +120,8 @@ class CommentControllerIntTest {
                 .andExpect(status().isNotFound());
     }
 
-    private String createCommentAndReturnId() {
-        return createCommentAndReturnId(1, "content");
+    private String createCommentAndReturnId(int mentionId) {
+        return createCommentAndReturnId(mentionId, "content");
     }
 
     private String createCommentAndReturnId(int mentionId, String content) {
