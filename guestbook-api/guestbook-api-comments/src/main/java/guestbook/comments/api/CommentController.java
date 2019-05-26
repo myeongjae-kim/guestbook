@@ -1,15 +1,12 @@
 package guestbook.comments.api;
 
-import static org.springframework.data.domain.Sort.Direction.DESC;
-
+import java.util.List;
 import javax.validation.Valid;
 
-import guestbook.comments.api.dto.CommentRequest;
+import guestbook.comments.api.dto.CommentPostRequest;
+import guestbook.comments.api.dto.CommentPutRequest;
 import guestbook.comments.api.dto.CommentResponse;
 import guestbook.comments.service.CommentService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,21 +32,19 @@ public class CommentController {
         return commentService.readComment(id);
     }
 
-    @GetMapping("/mention/{id}")
-    public Page<CommentResponse> list(
-            @PageableDefault(sort = "createdAt", direction = DESC) Pageable pageParam,
-            @PathVariable Integer id) {
-        return commentService.readCommentsByMentionId(pageParam, id);
+    @GetMapping("/mention/{mentionId}")
+    public List<CommentResponse> list(@PathVariable Integer mentionId) {
+        return commentService.readCommentsOf(mentionId);
     }
 
     @PostMapping
-    public String create(@RequestBody @Valid CommentRequest commentRequest) {
-        return commentService.createComment(commentRequest);
+    public String create(@RequestBody @Valid CommentPostRequest commentPostRequest) {
+        return commentService.createComment(commentPostRequest);
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable String id, @RequestBody @Valid CommentRequest commentRequest) {
-        commentService.updateComment(id, commentRequest);
+    public void update(@PathVariable String id, @RequestBody @Valid CommentPutRequest commentPutRequest) {
+        commentService.updateComment(id, commentPutRequest);
     }
 
     @DeleteMapping("/{id}")

@@ -1,9 +1,9 @@
 package guestbook.comments.domain;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import java.util.List;
 
-public interface CommentRepository extends PagingAndSortingRepository<Comment, String> {
-    Page<Comment> findAllByMentionId(Pageable pageable, Integer episodeId);
+import org.socialsignin.spring.data.dynamodb.repository.DynamoDBPagingAndSortingRepository;
+
+public interface CommentRepository extends DynamoDBPagingAndSortingRepository<Comment, String> {
+    List<Comment> findAllByMentionIdOrderByCreatedAtDesc(Integer mentionId);
 }

@@ -1,15 +1,16 @@
 package guestbook.comments.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import guestbook.comments.api.dto.CommentRequest;
+import guestbook.comments.api.dto.CommentPostRequest;
+import guestbook.comments.api.dto.CommentPutRequest;
 import guestbook.comments.api.dto.CommentResponse;
 import guestbook.comments.domain.Comment;
 import guestbook.comments.domain.CommentRepository;
 import guestbook.comments.exception.CommentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,17 +26,17 @@ public class CommentService {
         return CommentResponse.of(findCommentById(id));
     }
 
-    public String createComment(CommentRequest commentRequest) {
+    public String createComment(CommentPostRequest commentPostRequest) {
         Comment comment = Comment.builder()
-                .mentionId(commentRequest.getMentionId())
-                .content(commentRequest.getContent()).build();
+                .mentionId(commentPostRequest.getMentionId())
+                .content(commentPostRequest.getContent()).build();
         return commentRepository.save(comment).getId();
     }
 
-    public void updateComment(String id, CommentRequest commentRequest) {
+    public void updateComment(String id, CommentPutRequest commentPutRequest) {
         Comment comment = findCommentById(id);
 
-        comment.update(commentRequest.getContent());
+        comment.update(commentPutRequest.getContent());
         commentRepository.save(comment);
     }
 
@@ -45,9 +46,9 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public Page<CommentResponse> readCommentsByMentionId(Pageable pageable, Integer mentionId) {
-        Page<Comment> comments = commentRepository.findAllByMentionId(pageable, mentionId);
-        return comments.map(CommentResponse::of);
+    public List<CommentResponse> readCommentsOf(Integer mentionId) {
+        List<Comment> comments = commentRepository.findAllByMentionIdOrderByCreatedAtDesc(mentionId);
+        return comments.stream().map(CommentResponse::of).collect(Collectors.toList());
     }
 
     private Comment findCommentById(String id) {
