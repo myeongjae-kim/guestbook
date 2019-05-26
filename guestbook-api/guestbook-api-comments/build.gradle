@@ -74,13 +74,13 @@ task deleteCommentTable (type: Exec) {
 }
 
 createCommentTable.dependsOn dockerComposeUp
-bootRun.dependsOn createCommentTable
-
-bootRun.finalizedBy deleteCommentTable
 deleteCommentTable.finalizedBy dockerComposeDown
 
-test.dependsOn dockerComposeUp
-test.finalizedBy dockerComposeDown
+bootRun.dependsOn createCommentTable
+bootRun.finalizedBy deleteCommentTable
 
-integrationTest.dependsOn dockerComposeUp
-integrationTest.finalizedBy dockerComposeDown
+test.dependsOn createCommentTable
+test.finalizedBy deleteCommentTable
+
+integrationTest.dependsOn createCommentTable
+integrationTest.finalizedBy deleteCommentTable
