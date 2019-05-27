@@ -24,19 +24,23 @@ class CommentRowsContainer extends React.Component<IProps, IState> {
   }
 
   public componentDidMount() {
+    this.refreshComments()
+  }
+
+  public render() {
+    const { comments } = this.state
+    const { refreshComments } = this
+    return <CommentRows comments={comments} refreshComments={refreshComments} />
+  }
+
+  private setComments = (comments: ICommentResponse[]) => this.setState({ comments })
+  private refreshComments = () => {
     const { getAndSetCommentList } = this.props.dispatcher
     const { mentionId } = this.props
     const { setComments } = this
 
     getAndSetCommentList(mentionId, setComments)
   }
-
-  public render() {
-    const { comments } = this.state
-    return <CommentRows comments={comments} />
-  }
-
-  private setComments = (comments: ICommentResponse[]) => this.setState({ comments })
 }
 
 const mapStateToProps = ({ comments }: IRootState) => ({

@@ -4,11 +4,12 @@ import CommentRow from "./CommentRow";
 
 interface IProps {
   comments: ICommentResponse[]
+  refreshComments(): void
 }
 
-const CommentRows: React.FC<IProps> = ({ comments }) => {
+const CommentRows: React.FC<IProps> = ({ comments, refreshComments }) => {
   return <>{comments.map((comment, index) =>
-    <CommentRow comment={comment} key={index} />)
+    <CommentRow key={index} comment={comment} refreshComments={refreshComments} />)
   }</>
 }
 

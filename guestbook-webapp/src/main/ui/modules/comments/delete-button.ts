@@ -10,7 +10,7 @@ export type State = Record<{
 }>
 
 export const deleteComment = createAction("@commentDeleteButton/DELETE_COMMENT",
-  action => (id: number) => action({ id }));
+  action => (id: string, refreshCommentList: () => void) => action({ id, refreshCommentList }));
 const deleteCommentPending = createAction("@commentDeleteButton/DELETE_COMMENT_PENDING");
 const deleteCommentFulfilled = createAction("@commentDeleteButton/DELETE_COMMENT_FULFILLED");
 const deleteCommentRejected = createAction("@commentDeleteButton/DELETE_COMMENT_REJECTED",
@@ -58,9 +58,11 @@ export function* saga() {
 function* sagaDeleteComment(action: ActionType<typeof deleteComment>) {
   yield put(deleteCommentPending())
   try {
-    const { id } = action.payload
+    const { id, refreshCommentList } = action.payload
     yield call(comments.del, id);
     yield put(deleteCommentFulfilled());
+
+    refreshCommentList()
   } catch (e) {
     yield put(deleteCommentRejected(e));
   }
