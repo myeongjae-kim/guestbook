@@ -29,6 +29,7 @@ public class CommentService {
     public String createComment(CommentPostRequest commentPostRequest) {
         Comment comment = Comment.builder()
                 .mentionId(commentPostRequest.getMentionId())
+                .name(commentPostRequest.getName())
                 .content(commentPostRequest.getContent()).build();
         return commentRepository.save(comment).getId();
     }

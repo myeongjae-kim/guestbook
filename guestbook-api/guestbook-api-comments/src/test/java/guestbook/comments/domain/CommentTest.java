@@ -9,6 +9,7 @@ public class CommentTest {
     public static Comment getCommentFixture(String id) {
         Comment comment = Comment.builder()
                 .mentionId(1)
+                .name("name")
                 .content("content").build();
         comment.setId(id);
         comment.setCreatedAt(now());
@@ -24,6 +25,7 @@ public class CommentTest {
     void buildComment_ValidInput_CreatedComment() {
         Comment comment = Comment.builder()
                 .mentionId(1)
+                .name("name")
                 .content("content").build();
 
         then(comment)
