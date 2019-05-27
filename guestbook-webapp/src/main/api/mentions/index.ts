@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import * as ko from 'date-fns/locale/ko'
 import { MENTION_API_DOMAIN } from "../common";
-import { returnBodyAs, returnBodyAsNumber, throwWhenStatusIsNotOk } from "../util";
+import { returnBodyAs, returnBodyAsNumber, throwWhenStatusIsNotOk, toDateString } from "../util";
 import IMentionRequest from "./dto/IMentionRequest";
 import IMentionResponse from "./dto/IMentionResponse";
 
@@ -49,5 +49,3 @@ const formatCreatedAt = (mention: IMentionResponse) => ({
   ...mention,
   createdAt: toDateString(mention.createdAt)
 })
-
-const toDateString = (createdAt: string) => format(createdAt, "YYYY. MM. DD. (ddd)", { locale: ko })
