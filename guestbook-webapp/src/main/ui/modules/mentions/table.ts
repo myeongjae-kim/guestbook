@@ -11,8 +11,7 @@ export type State = Record<{
   rejected: boolean;
 }>
 
-export const getMentionList = createAction("@mentionTable/GET_MENTION_LIST",
-  action => () => action(mentions.getList()));
+export const getMentionList = createAction("@mentionTable/GET_MENTION_LIST")
 const getMentionListPending = createAction("@mentionTable/GET_MENTION_LIST_PENDING");
 const getMentionListFulfilled = createAction("@mentionTable/GET_MENTION_LIST_FULFILLED",
   action => (mentionList: IMentionResponse[]) => action(mentionList));
