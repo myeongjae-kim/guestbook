@@ -27,9 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest
+@ActiveProfiles("test")
 class CommentControllerTest {
     private @Autowired MockMvc mvc;
     private @MockBean CommentService commentService;
@@ -73,6 +75,7 @@ class CommentControllerTest {
     void createComment_ValidInput_ValidOutput() throws Exception {
         CommentPostRequest commentPostRequest = new CommentPostRequest();
         commentPostRequest.setMentionId(1);
+        commentPostRequest.setName("name");
         commentPostRequest.setContent("content");
 
         given(commentService.createComment(any(CommentPostRequest.class))).willReturn("comment id");
