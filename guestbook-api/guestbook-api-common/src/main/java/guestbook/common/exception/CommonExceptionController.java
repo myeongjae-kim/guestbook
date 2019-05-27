@@ -15,7 +15,7 @@ public class CommonExceptionController {
 
     public static ApiError handleInvalidParam(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> fieldError.getField() + " 필드가 " + fieldError.getDefaultMessage())
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining("\n"));
 
         return new ApiError(HttpStatus.BAD_REQUEST, message);

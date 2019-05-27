@@ -55,6 +55,7 @@ class CommentControllerIntTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.mentionId").isNumber())
+                .andExpect(jsonPath("$.name").isString())
                 .andExpect(jsonPath("$.content").isString())
                 .andExpect(jsonPath("$.createdAt").isNotEmpty());
     }
@@ -63,7 +64,7 @@ class CommentControllerIntTest {
     void readComments_WithMentionId_ValidOutput() throws Exception {
         final int size = 10;
         List<String> ids = IntStream.range(0, size)
-                .mapToObj(i -> createCommentAndReturnId(uniqueMentionId, "arbitrary content"))
+                .mapToObj(i -> createCommentAndReturnId(uniqueMentionId, "arbitrary name", "arbitrary content"))
                 .collect(toList());
 
         MvcResult result = this.mvc.perform(get("/mention/{mentionId}", uniqueMentionId))
@@ -79,6 +80,7 @@ class CommentControllerIntTest {
     void createComment_ValidInput_ValidOutput() throws Exception {
         CommentPostRequest commentPostRequest = new CommentPostRequest();
         commentPostRequest.setMentionId(1);
+        commentPostRequest.setName("name");
         commentPostRequest.setContent("content");
 
         this.mvc.perform(post("/")
@@ -121,14 +123,15 @@ class CommentControllerIntTest {
     }
 
     private String createCommentAndReturnId(int mentionId) {
-        return createCommentAndReturnId(mentionId, "content");
+        return createCommentAndReturnId(mentionId, "name", "content");
     }
 
-    private String createCommentAndReturnId(int mentionId, String content) {
+    private String createCommentAndReturnId(int mentionId, String name, String content) {
         RestTemplate restTemplate = new RestTemplate();
 
         CommentPostRequest commentPostRequest = new CommentPostRequest();
         commentPostRequest.setMentionId(mentionId);
+        commentPostRequest.setName(name);
         commentPostRequest.setContent(content);
 
         HttpHeaders headers = new HttpHeaders();

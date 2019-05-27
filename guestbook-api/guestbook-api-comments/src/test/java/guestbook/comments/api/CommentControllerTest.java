@@ -44,6 +44,7 @@ class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(commentResponse.getId()))
                 .andExpect(jsonPath("$.mentionId").value(commentResponse.getMentionId()))
+                .andExpect(jsonPath("$.name").value(commentResponse.getName()))
                 .andExpect(jsonPath("$.content").value(commentResponse.getContent()))
                 .andExpect(jsonPath("$.createdAt").isNotEmpty());
     }

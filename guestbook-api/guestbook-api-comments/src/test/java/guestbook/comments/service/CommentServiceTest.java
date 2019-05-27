@@ -30,7 +30,7 @@ class CommentServiceTest {
     private @Mock CommentRepository commentRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.commentService = new CommentService(commentRepository);
     }
 
@@ -48,6 +48,7 @@ class CommentServiceTest {
                 .hasNoNullFieldsOrProperties()
                 .hasFieldOrPropertyWithValue("id", comment.getId())
                 .hasFieldOrPropertyWithValue("mentionId", comment.getMentionId())
+                .hasFieldOrPropertyWithValue("name", comment.getName())
                 .hasFieldOrPropertyWithValue("content", comment.getContent());
     }
 

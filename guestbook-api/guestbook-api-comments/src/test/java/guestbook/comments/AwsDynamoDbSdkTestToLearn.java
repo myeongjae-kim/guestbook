@@ -35,17 +35,13 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class AwsDynamoDbSdkTestToLearn {
-    private AWSCredentials awsCredentials;
-    private AWSCredentialsProvider awsCredentialsProvider;
     private AmazonDynamoDB amazonDynamoDB;
     private Map<String, AttributeValue> item;
 
     @BeforeEach
     void setup() {
-        awsCredentials = new BasicAWSCredentials(
-                "key1", "key2");
-
-        awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);
+        AWSCredentials awsCredentials = new BasicAWSCredentials("key1", "key2");
+        AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);
 
         amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
                 .withCredentials(awsCredentialsProvider)
