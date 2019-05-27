@@ -1,7 +1,6 @@
 import { Record } from "immutable";
-import IErrorFromGuestbookAPI from "main/api/IErrorFromGuestbookAPI";
-import * as mentions from "main/api/mentions"
-import { alertError } from "main/api/util";
+import ApiError from "main/api/ApiError";
+import * as mentions from "main/api/mentions";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { ActionType, createAction, getType } from "typesafe-actions";
 import { getMentionList } from "./table";
@@ -16,7 +15,7 @@ export const deleteMention = createAction("@mentionDeleteButton/DELETE_MENTION",
 const deleteMentionPending = createAction("@mentionDeleteButton/DELETE_MENTION_PENDING");
 const deleteMentionFulfilled = createAction("@mentionDeleteButton/DELETE_MENTION_FULFILLED");
 const deleteMentionRejected = createAction("@mentionDeleteButton/DELETE_MENTION_REJECTED",
-  action => (error: IErrorFromGuestbookAPI | Error) => action(error))
+  action => (error: ApiError | Error) => action(error))
 
 export type Action = ActionType<
   typeof deleteMention |
@@ -42,7 +41,7 @@ export const reducer = (
         pending: false
       });
     case getType(deleteMentionRejected):
-      alertError(action.payload);
+      alert(action.payload.toString());
       return state.merge({
         pending: false,
         rejected: true

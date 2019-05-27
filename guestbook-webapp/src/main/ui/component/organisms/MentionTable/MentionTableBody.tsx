@@ -1,7 +1,7 @@
 import IMentionResponse from 'main/api/mentions/dto/IMentionResponse';
 import * as React from 'react';
 import { Table } from 'semantic-ui-react';
-import MentionTableRow from './row/MentionTableRow';
+import MentionTableRow from './row/mention/MentionTableRow';
 
 interface IProps {
   mentions: IMentionResponse[]
