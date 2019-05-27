@@ -49,7 +49,9 @@ public class CommentService {
 
     public List<CommentResponse> readCommentsOf(Integer mentionId) {
         List<Comment> comments = commentRepository.findAllByMentionIdOrderByCreatedAtAsc(mentionId);
-        return comments.stream().map(CommentResponse::of).collect(Collectors.toList());
+        return comments.stream()
+                .filter(c -> !c.isDeleted())
+                .map(CommentResponse::of).collect(Collectors.toList());
     }
 
     private Comment findCommentById(String id) {

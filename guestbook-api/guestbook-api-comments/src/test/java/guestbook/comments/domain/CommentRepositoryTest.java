@@ -59,7 +59,7 @@ class CommentRepositoryTest {
     }
 
     @Test
-    void findComments_ByMentionIdAndOrderByCreatedAtDesc_FoundCommentsInDesignatedOrder() {
+    void findComments_ByMentionIdAndOrderByCreatedAtDescDeletedFalse_FoundCommentsInDesignatedOrder() {
         // given
         int size = 10;
         IntStream.range(0, size).forEach(i -> commentRepository.save(Comment.builder()
@@ -68,7 +68,8 @@ class CommentRepositoryTest {
                 .content("content " + i).build()));
 
         // when
-        List<Comment> foundComment = commentRepository.findAllByMentionIdOrderByCreatedAtAsc(uniqueMentionId);
+        List<Comment> foundComment = commentRepository
+                .findAllByMentionIdOrderByCreatedAtAsc(uniqueMentionId);
 
         // then
         then(foundComment.size()).isEqualTo(size);

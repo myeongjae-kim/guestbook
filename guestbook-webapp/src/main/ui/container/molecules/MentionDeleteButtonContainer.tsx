@@ -1,4 +1,4 @@
-import MentionDeleteButton from 'main/ui/component/molecules/MentionDeleteButton';
+import DeleteButton from 'main/ui/component/molecules/DeleteButton';
 import * as deleteButtonModule from 'main/ui/modules/mentions/delete-button';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -11,12 +11,12 @@ interface IProps {
 
 const MentionDeleteButtonContainer: React.FC<IProps> = ({ id, dispatcher }) => {
   const deleteMention = () => {
-    if (window.confirm('글을 지우시겠습니까?')) {
+    if (window.confirm('댓글을 지우시겠습니까?')) {
       dispatcher.deleteMention(id);
     }
     return;
   }
-  return <MentionDeleteButton deleteMention={deleteMention} />;
+  return <DeleteButton del={deleteMention} />;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<deleteButtonModule.Action>) => ({

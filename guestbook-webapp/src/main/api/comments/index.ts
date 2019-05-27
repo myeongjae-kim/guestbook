@@ -40,7 +40,7 @@ export const put = (id: number, requestBody: ICommentPutRequest): Promise<void> 
     .then((_: AxiosResponse<void>) => resolve())
     .catch((err: AxiosError) => reject(new ApiError(err))))
 
-export const del = (id: number): Promise<void> => new Promise((resolve, reject) =>
+export const del = (id: string): Promise<void> => new Promise((resolve, reject) =>
   axios
     .delete(`${COMMENT_API_DOMAIN}/${id}`)
     .then((_: AxiosResponse<void>) => resolve())
