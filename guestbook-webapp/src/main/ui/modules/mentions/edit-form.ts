@@ -1,8 +1,7 @@
 import { Record } from "immutable";
-import IErrorFromGuestbookAPI from "main/api/IErrorFromGuestbookAPI";
-import * as mentions from "main/api/mentions"
+import ApiError from "main/api/ApiError";
+import * as mentions from "main/api/mentions";
 import IMentionRequest from "main/api/mentions/dto/IMentionRequest";
-import { alertError } from "main/api/util";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { ActionType, createAction, getType } from "typesafe-actions";
 import { getMentionList } from "./table";
@@ -17,7 +16,7 @@ export const putMention = createAction("@mentionEditForm/PUT_MENTION",
 const putMentionPending = createAction("@mentionEditForm/PUT_MENTION_PENDING");
 const putMentionFulfilled = createAction("@mentionEditForm/PUT_MENTION_FULFILLED");
 const putMentionRejected = createAction("@mentionEditForm/PUT_MENTION_REJECTED",
-  action => (error: IErrorFromGuestbookAPI | Error) => action(error))
+  action => (error: ApiError | Error) => action(error))
 
 export type Action = ActionType<
   typeof putMention |
@@ -42,7 +41,7 @@ export const reducer = (
       alert("글을 수정했습니다.")
       return createInitialState();
     case getType(putMentionRejected):
-      alertError(action.payload);
+      alert(action.payload.toString());
       return state.merge({
         pending: false,
         rejected: true

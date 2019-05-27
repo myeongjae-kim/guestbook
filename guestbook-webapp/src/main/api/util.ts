@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import * as ko from 'date-fns/locale/ko';
-import IErrorFromGuestbookAPI from "./IErrorFromGuestbookAPI";
+import ApiError from "./ApiError";
 
 export const toDateString = (createdAt: string) => format(createdAt, "YYYY. MM. DD. (ddd)", { locale: ko })
 
@@ -9,22 +9,9 @@ export const throwWhenStatusIsNotOk = async (res: Response) => {
     return res
   }
 
-  throw await res.json()
+  const e = await res.json()
+  throw new ApiError(e);
 }
 
 export const returnBodyAs = async <T>(res: Response) => res.json() as Promise<T>
 export const returnBodyAsNumber = async (res: Response) => parseInt(await res.text(), 10)
-
-export const alertError = (e: IErrorFromGuestbookAPI | Error): void => {
-  if (e instanceof Error) {
-    alert(e)
-    return
-  }
-
-  alert(errorToString(e))
-}
-
-const errorToString = ({ status, error, message, timestamp }: IErrorFromGuestbookAPI) => `Error: ${error}
-Status: ${status}
-Message: ${message}
-Timestamp: ${timestamp}`

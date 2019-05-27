@@ -1,8 +1,7 @@
 import { Record } from "immutable";
-import IErrorFromGuestbookAPI from "main/api/IErrorFromGuestbookAPI";
+import IApiError from "main/api/ApiError";
 import * as mentions from "main/api/mentions"
 import IMentionResponse from "main/api/mentions/dto/IMentionResponse";
-import { alertError } from "main/api/util";
 import { call, put, takeEvery } from "redux-saga/effects";
 import { ActionType, createAction, getType } from "typesafe-actions";
 
@@ -18,7 +17,7 @@ const getMentionListPending = createAction("@mentionTable/GET_MENTION_LIST_PENDI
 const getMentionListFulfilled = createAction("@mentionTable/GET_MENTION_LIST_FULFILLED",
   action => (mentionList: IMentionResponse[]) => action(mentionList));
 const getMentionListRejected = createAction("@mentionTable/GET_MENTION_LIST_REJECTED",
-  action => (error: IErrorFromGuestbookAPI | Error) => action(error))
+  action => (error: IApiError | Error) => action(error))
 
 export type Action = ActionType<
   typeof getMentionList |
@@ -46,7 +45,7 @@ export const reducer = (
         pending: false
       });
     case getType(getMentionListRejected):
-      alertError(action.payload);
+      alert(action.payload.toString());
       return state.merge({
         pending: false,
         rejected: true
