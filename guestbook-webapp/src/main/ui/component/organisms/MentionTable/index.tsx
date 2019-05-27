@@ -18,7 +18,7 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 const MentionTable: React.FC<IProps> = ({ classes, mentions }) =>
-  <Table selectable unstackable className={classes.tableFont}>
+  <Table unstackable className={classes.tableFont}>
     <MentionTableHeader />
     <MentionTableBody mentions={mentions} />
   </Table>
