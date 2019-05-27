@@ -48,7 +48,7 @@ public class CommentService {
     }
 
     public List<CommentResponse> readCommentsOf(Integer mentionId) {
-        List<Comment> comments = commentRepository.findAllByMentionIdOrderByCreatedAtDesc(mentionId);
+        List<Comment> comments = commentRepository.findAllByMentionIdOrderByCreatedAtAsc(mentionId);
         return comments.stream().map(CommentResponse::of).collect(Collectors.toList());
     }
 

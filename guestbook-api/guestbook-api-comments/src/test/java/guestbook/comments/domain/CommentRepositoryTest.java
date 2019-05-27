@@ -68,14 +68,14 @@ class CommentRepositoryTest {
                 .content("content " + i).build()));
 
         // when
-        List<Comment> foundComment = commentRepository.findAllByMentionIdOrderByCreatedAtDesc(uniqueMentionId);
+        List<Comment> foundComment = commentRepository.findAllByMentionIdOrderByCreatedAtAsc(uniqueMentionId);
 
         // then
         then(foundComment.size()).isEqualTo(size);
         IntStream.range(1, size).forEach(i -> {
             Comment prev = foundComment.get(i-1);
             Comment next = foundComment.get(i);
-            then(prev.getCreatedAt().isAfter(next.getCreatedAt())).isTrue();
+            then(prev.getCreatedAt().isBefore(next.getCreatedAt())).isTrue();
         });
     }
 

@@ -58,7 +58,7 @@ class CommentServiceTest {
         List<Comment> comments = Arrays.asList(
                 getCommentFixture("comment id 1"),
                 getCommentFixture("comment id 2"));
-        given(commentRepository.findAllByMentionIdOrderByCreatedAtDesc(anyInt())).willReturn(comments);
+        given(commentRepository.findAllByMentionIdOrderByCreatedAtAsc(anyInt())).willReturn(comments);
 
         // when
         List<CommentResponse> foundComments = commentService.readCommentsOf(1);
