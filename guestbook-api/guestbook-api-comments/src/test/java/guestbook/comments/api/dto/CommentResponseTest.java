@@ -23,6 +23,7 @@ public class CommentResponseTest {
         then(commentResponse)
                 .hasFieldOrPropertyWithValue("id", comment.getId())
                 .hasFieldOrPropertyWithValue("mentionId", comment.getMentionId())
+                .hasFieldOrPropertyWithValue("name", comment.getName())
                 .hasFieldOrPropertyWithValue("content", comment.getContent())
                 .hasFieldOrPropertyWithValue("createdAt", comment.getCreatedAt());
     }

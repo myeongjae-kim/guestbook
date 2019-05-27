@@ -32,6 +32,8 @@ public class Comment {
     @DynamoDBIndexHashKey(globalSecondaryIndexName = "byMentionId")
     private Integer mentionId;
     @DynamoDBAttribute
+    private String name;
+    @DynamoDBAttribute
     private String content;
     @DynamoDBAttribute
     @DynamoDBTyped(DynamoDBAttributeType.BOOL)
@@ -45,8 +47,9 @@ public class Comment {
     private LocalDateTime deletedAt;
 
     @Builder
-    public Comment(Integer mentionId, String content) {
+    public Comment(Integer mentionId, String name, String content) {
         this.mentionId = mentionId;
+        this.name = name;
         this.content = content;
         this.createdAt = now();
         this.deleted = false;

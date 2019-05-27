@@ -9,5 +9,6 @@ import lombok.Setter;
 @Setter
 public class CommentPostRequest {
     private @NotNull Integer mentionId;
+    private @NotNull String name;
     private @NotNull String content;
 }

@@ -28,11 +28,13 @@ class CommentRepositoryTest {
     void createComment_ValidInput_CreatedComment() {
         Comment createdComment = commentRepository.save(Comment.builder()
                 .mentionId(uniqueMentionId)
+                .name("name")
                 .content("content").build());
 
         then(createdComment)
                 .hasNoNullFieldsOrPropertiesExcept("deletedAt")
                 .hasFieldOrPropertyWithValue("mentionId", uniqueMentionId)
+                .hasFieldOrPropertyWithValue("name", "name")
                 .hasFieldOrPropertyWithValue("content", "content");
     }
 
@@ -41,6 +43,7 @@ class CommentRepositoryTest {
         // given
         Comment createdComment = commentRepository.save(Comment.builder()
                 .mentionId(uniqueMentionId)
+                .name("name")
                 .content("content").build());
 
         // when
@@ -51,6 +54,7 @@ class CommentRepositoryTest {
         then(foundComment)
                 .hasNoNullFieldsOrPropertiesExcept("deletedAt")
                 .hasFieldOrPropertyWithValue("mentionId", uniqueMentionId)
+                .hasFieldOrPropertyWithValue("name", "name")
                 .hasFieldOrPropertyWithValue("content", "content");
     }
 
@@ -60,6 +64,7 @@ class CommentRepositoryTest {
         int size = 10;
         IntStream.range(0, size).forEach(i -> commentRepository.save(Comment.builder()
                 .mentionId(uniqueMentionId)
+                .name("name " + i)
                 .content("content " + i).build()));
 
         // when
@@ -77,8 +82,11 @@ class CommentRepositoryTest {
     @Test
     void updateComment_ValidInput_UpdatedComment() {
         // given
-        String id = commentRepository.save(Comment.builder().mentionId(uniqueMentionId).content("content").build())
-                .getId();
+        String id = commentRepository.save(Comment.builder()
+                .mentionId(uniqueMentionId)
+                .name("name")
+                .content("content").build()
+        ).getId();
 
         // when
         Comment foundComment = commentRepository.findById(id)
@@ -90,6 +98,7 @@ class CommentRepositoryTest {
         then(foundComment)
                 .hasNoNullFieldsOrPropertiesExcept("deletedAt")
                 .hasFieldOrPropertyWithValue("mentionId", uniqueMentionId)
+                .hasFieldOrPropertyWithValue("name", "name")
                 .hasFieldOrPropertyWithValue("content", "updated content");
     }
 
@@ -97,6 +106,7 @@ class CommentRepositoryTest {
     void deleteCreatedComment_TryToFindDeletedComment_ThrowCommentNotFoundException() {
         // given
         Comment createdComment = commentRepository.save(Comment.builder()
+                .name("name")
                 .mentionId(uniqueMentionId)
                 .content("content").build());
 
