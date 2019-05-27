@@ -1,6 +1,6 @@
 import IMentionRequest from 'main/api/mentions/dto/IMentionRequest';
 import IMentionResponse from 'main/api/mentions/dto/IMentionResponse';
-import MentionEditForm from 'main/ui/component/organisms/MentionTable/row/MentionEditForm';
+import MentionEditForm from 'main/ui/component/organisms/MentionTable/row/mention/MentionEditForm';
 import { IRootState } from 'main/ui/modules';
 import * as editFormModule from 'main/ui/modules/mentions/edit-form';
 import * as React from 'react';

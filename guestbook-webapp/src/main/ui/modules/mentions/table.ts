@@ -1,5 +1,5 @@
 import { Record } from "immutable";
-import IApiError from "main/api/ApiError";
+import ApiError from "main/api/ApiError";
 import * as mentions from "main/api/mentions"
 import IMentionResponse from "main/api/mentions/dto/IMentionResponse";
 import { call, put, takeEvery } from "redux-saga/effects";
@@ -16,7 +16,7 @@ const getMentionListPending = createAction("@mentionTable/GET_MENTION_LIST_PENDI
 const getMentionListFulfilled = createAction("@mentionTable/GET_MENTION_LIST_FULFILLED",
   action => (mentionList: IMentionResponse[]) => action(mentionList));
 const getMentionListRejected = createAction("@mentionTable/GET_MENTION_LIST_REJECTED",
-  action => (error: IApiError | Error) => action(error))
+  action => (error: ApiError | Error) => action(error))
 
 export type Action = ActionType<
   typeof getMentionList |
