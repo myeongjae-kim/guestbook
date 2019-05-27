@@ -69,6 +69,25 @@ class CommentServiceTest {
     }
 
     @Test
+    void readComments_WithDeletedComment_FoundNotDeletedComments() {
+        // given
+        List<Comment> comments = Arrays.asList(
+                getCommentFixture("comment id 1"),
+                getCommentFixture("comment id 2"));
+        comments.get(0).delete();
+        given(commentRepository.findAllByMentionIdOrderByCreatedAtAsc(anyInt())).willReturn(comments);
+
+        // when
+        List<CommentResponse> foundComments = commentService.readCommentsOf(1);
+
+        // then
+        then(foundComments)
+                .hasSize(1)
+                .extracting("id")
+                .containsOnly("comment id 2");
+    }
+
+    @Test
     void readComment_InvalidId_ThrowCommentNotFoundException() {
         given(commentRepository.findById(anyString())).willReturn(Optional.empty());
 
