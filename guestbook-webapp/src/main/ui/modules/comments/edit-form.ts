@@ -60,7 +60,6 @@ function* sagaPutComment(action: ActionType<typeof putComment>) {
   try {
     const { id, commentPutRequest, refreshComments } = action.payload
     yield call(comments.put, id, commentPutRequest);
-    alert("댓글을 수정했습니다.")
     yield put(putCommentFulfilled());
 
     refreshComments();

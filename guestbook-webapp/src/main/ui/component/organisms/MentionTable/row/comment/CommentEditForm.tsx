@@ -1,9 +1,8 @@
 import ICommentPutRequest from 'main/api/comments/dto/ICommentPutRequest';
 import ICommentResponse from 'main/api/comments/dto/ICommentResponse';
 import * as React from 'react';
-import { ChangeEvent } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-import { Button, Form, Input, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
+import { Button, Form, Icon, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 
 const styles = {
   tableFont: {
@@ -38,7 +37,12 @@ const CommentEditForm: React.FC<IProps> = ({
 }) => {
   const { content } = commentPutRequest;
   return <Table.Row>
-    <Table.Cell>{oldComment.id}</Table.Cell>
+    <Table.Cell>
+      <Icon name="level up alternate" style={{
+        transform: 'rotate(90deg)',
+        marginLeft: 10
+      }} />
+    </Table.Cell>
     <Table.Cell>{oldComment.name}</Table.Cell>
     <Table.Cell>
       <Form>
