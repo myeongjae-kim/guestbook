@@ -1,5 +1,6 @@
 import ICommentResponse from "main/api/comments/dto/ICommentResponse";
 import CommentDeleteButtonContainer from "main/ui/container/molecules/CommentDeleteButtonContainer";
+import CommentEditFormContainer from "main/ui/container/organisms/CommentEditFormContainer";
 import * as React from 'react';
 import { Button, Icon, Table } from "semantic-ui-react";
 
@@ -10,6 +11,17 @@ interface IProps {
 
 const CommentRow: React.FC<IProps> = ({ comment, refreshComments }) => {
   const { id, name, content, createdAt } = comment;
+  const [isEditing, setIsEditing] = React.useState(false);
+  const edit = () => setIsEditing(true)
+  const finishEditing = () => setIsEditing(false)
+
+
+  if (isEditing) {
+    return <CommentEditFormContainer
+      oldComment={comment}
+      finishEditing={finishEditing}
+      refreshComments={refreshComments} />
+  }
 
   return <>
     <Table.Row style={{
@@ -26,7 +38,7 @@ const CommentRow: React.FC<IProps> = ({ comment, refreshComments }) => {
       <Table.Cell>{createdAt}</Table.Cell>
       <Table.Cell>
         <Button.Group>
-          <Button icon="edit" />
+          <Button icon="edit" onClick={edit} />
           <CommentDeleteButtonContainer id={id} refreshComments={refreshComments} />
         </Button.Group>
       </Table.Cell>
