@@ -5,7 +5,7 @@ import ICommentPostRequest from "./dto/ICommentPostRequest";
 import ICommentPutRequest from "./dto/ICommentPutRequest";
 import ICommentResponse from "./dto/ICommentResponse";
 
-export const get = (id: number): Promise<ICommentResponse> => new Promise((resolve, reject) =>
+export const get = (id: string): Promise<ICommentResponse> => new Promise((resolve, reject) =>
   axios
     .get(`${COMMENT_API_DOMAIN}/${id}`)
     .then((resp: AxiosResponse<ICommentResponse>) => formatCreatedAt(resp.data))
@@ -30,7 +30,7 @@ export const post = (requestBody: ICommentPostRequest): Promise<number> => new P
     .then((resp: AxiosResponse<string>) => resolve(parseInt(resp.data, 10)))
     .catch((err: AxiosError) => reject(new ApiError(err))))
 
-export const put = (id: number, requestBody: ICommentPutRequest): Promise<void> => new Promise((resolve, reject) =>
+export const put = (id: string, requestBody: ICommentPutRequest): Promise<void> => new Promise((resolve, reject) =>
   axios
     .put(`${COMMENT_API_DOMAIN}/${id}`, requestBody, {
       headers: {

@@ -10,8 +10,9 @@ export type State = Record<{
   rejected: boolean;
 }>
 
-export const putComment = createAction("@commentEditForm/PUT_COMMENT",
-  action => (id: number, commentPutRequest: ICommentPutRequest) => action({ id, commentPutRequest }));
+export const putComment = createAction("@commentEditForm/PUT_COMMENT", action =>
+  (id: string, commentPutRequest: ICommentPutRequest, refreshComments: () => void) =>
+    action({ id, commentPutRequest, refreshComments }));
 const putCommentPending = createAction("@commentEditForm/PUT_COMMENT_PENDING");
 const putCommentFulfilled = createAction("@commentEditForm/PUT_COMMENT_FULFILLED");
 const putCommentRejected = createAction("@commentEditForm/PUT_COMMENT_REJECTED",
@@ -57,10 +58,12 @@ export function* saga() {
 function* sagaPutComment(action: ActionType<typeof putComment>) {
   yield put(putCommentPending())
   try {
-    const { id, commentPutRequest } = action.payload
+    const { id, commentPutRequest, refreshComments } = action.payload
     yield call(comments.put, id, commentPutRequest);
     alert("댓글을 수정했습니다.")
     yield put(putCommentFulfilled());
+
+    refreshComments();
   } catch (e) {
     yield put(putCommentRejected(e));
   }
