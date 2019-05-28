@@ -6,13 +6,13 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import { ActionType, createAction, getType } from "typesafe-actions";
 
 export type State = Record<{
-  commentPostRequest: ICommentPostRequest
   pending: boolean;
   rejected: boolean;
 }>
 
-export const postComment = createAction("@commentAddForm/POST_COMMENT",
-  action => (commentPostRequest: ICommentPostRequest) => action({ commentPostRequest }));
+export const postComment = createAction("@commentAddForm/POST_COMMENT", action =>
+  (commentPostRequest: ICommentPostRequest, refreshComments: () => void) =>
+    action({ commentPostRequest, refreshComments }));
 const postCommentPending = createAction("@commentAddForm/POST_COMMENT_PENDING");
 const postCommentFulfilled = createAction("@commentAddForm/POST_COMMENT_FULFILLED");
 const postCommentRejected = createAction("@commentAddForm/POST_COMMENT_REJECTED",
@@ -27,17 +27,10 @@ export type Action = ActionType<
   typeof postComment |
   typeof postCommentPending |
   typeof postCommentFulfilled |
-  typeof postCommentRejected |
-  typeof changeName |
-  typeof changeContent
+  typeof postCommentRejected
 >
 
 const createInitialState = Record({
-  commentPostRequest: {
-    mentionId: -1,
-    name: "",
-    content: ""
-  } as ICommentPostRequest,
   pending: false,
   rejected: false
 });
@@ -58,18 +51,6 @@ export const reducer = (
         rejected: true
       });
 
-    case getType(changeName):
-      return state.set("commentPostRequest", {
-        ...state.get("commentPostRequest"),
-        name: action.payload
-      });
-
-    case getType(changeContent):
-      return state.set("commentPostRequest", {
-        ...state.get("commentPostRequest"),
-        content: action.payload
-      });
-
     default:
       return state.merge({});
   }
@@ -82,10 +63,12 @@ export function* saga() {
 function* sagaPostComment(action: ActionType<typeof postComment>) {
   yield put(postCommentPending())
   try {
-    const { commentPostRequest } = action.payload
+    const { commentPostRequest, refreshComments } = action.payload
     yield call(comments.post, commentPostRequest);
     alert("댓글을 등록했습니다.")
     yield put(postCommentFulfilled());
+
+    refreshComments()
   } catch (e) {
     yield put(postCommentRejected(e));
   }
