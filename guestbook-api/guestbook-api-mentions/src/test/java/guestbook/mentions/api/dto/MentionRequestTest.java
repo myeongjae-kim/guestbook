@@ -1,6 +1,5 @@
 package guestbook.mentions.api.dto;
 
-
 import static org.assertj.core.api.BDDAssertions.then;
 
 import javax.validation.Validation;

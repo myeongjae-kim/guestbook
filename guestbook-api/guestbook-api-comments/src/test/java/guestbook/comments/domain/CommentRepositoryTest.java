@@ -74,7 +74,7 @@ class CommentRepositoryTest {
         // then
         then(foundComment.size()).isEqualTo(size);
         IntStream.range(1, size).forEach(i -> {
-            Comment prev = foundComment.get(i-1);
+            Comment prev = foundComment.get(i - 1);
             Comment next = foundComment.get(i);
             then(prev.getCreatedAt().isBefore(next.getCreatedAt())).isTrue();
         });

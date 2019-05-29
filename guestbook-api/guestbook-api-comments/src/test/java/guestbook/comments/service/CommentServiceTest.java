@@ -115,7 +115,7 @@ class CommentServiceTest {
     void updateComment_ValidInput_ValidOutput() {
         // given
         Comment updatedComment = getCommentFixture();
-        String id = updatedComment.getId();
+        final String id = updatedComment.getId();
         updatedComment.update("new content");
         given(commentRepository.findById(anyString())).willReturn(Optional.of(updatedComment));
         given(commentRepository.save(any(Comment.class))).willReturn(updatedComment);
