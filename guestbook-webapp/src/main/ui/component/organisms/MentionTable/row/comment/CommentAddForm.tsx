@@ -1,8 +1,7 @@
-import ICommentPutRequest from 'main/api/comments/dto/ICommentPutRequest';
-import ICommentResponse from 'main/api/comments/dto/ICommentResponse';
+import ICommentPostRequest from 'main/api/comments/dto/ICommentPostRequest';
 import * as React from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-import { Button, Form, Icon, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
+import { Button, Form, Icon, Input, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 
 const styles = {
   tableFont: {
@@ -20,25 +19,25 @@ const styles = {
     width: 250
   },
   row: {
-    background: "#f4f4f4"
+    background: "#fafafa"
   }
 }
 
 interface IProps extends WithStyles<typeof styles> {
-  oldComment: ICommentResponse
-  commentPutRequest: ICommentPutRequest
-  putComment(): void
+  commentPostRequest: ICommentPostRequest
+  postComment(): void
+  changeName(e: React.ChangeEvent<HTMLInputElement>): void
   changeContent(_: React.FormEvent<HTMLTextAreaElement>, data: TextAreaProps): void
 }
 
-const CommentEditForm: React.FC<IProps> = ({
+const CommentAddForm: React.FC<IProps> = ({
   classes,
-  oldComment,
-  commentPutRequest,
-  putComment,
+  commentPostRequest,
+  postComment,
+  changeName,
   changeContent
 }) => {
-  const { content } = commentPutRequest;
+  const { name, content } = commentPostRequest;
   return <Table.Row className={classes.row}>
     <Table.Cell>
       <Icon name="level up alternate" style={{
@@ -46,17 +45,18 @@ const CommentEditForm: React.FC<IProps> = ({
         marginLeft: 10
       }} />
     </Table.Cell>
-    <Table.Cell>{oldComment.name}</Table.Cell>
     <Table.Cell>
+      <Input className={classes.nameInput} value={name} onChange={changeName} />
+    </Table.Cell>
+    <Table.Cell colSpan={2}>
       <Form>
         <TextArea className={classes.contentInput} value={content} onChange={changeContent} />
       </Form>
     </Table.Cell>
-    <Table.Cell>{oldComment.createdAt}</Table.Cell>
     <Table.Cell textAlign="center">
-      <Button icon="check" onClick={putComment} />
+      <Button icon="check" onClick={postComment} />
     </Table.Cell>
   </Table.Row>
 }
 
-export default withStyles(styles)(CommentEditForm);
+export default withStyles(styles)(CommentAddForm);
