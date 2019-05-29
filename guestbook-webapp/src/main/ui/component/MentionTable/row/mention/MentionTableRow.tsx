@@ -1,7 +1,7 @@
 import IMentionResponse from "main/api/mentions/dto/IMentionResponse";
-import MentionDeleteButtonContainer from "main/ui/container/molecules/MentionDeleteButtonContainer";
-import CommentRowsContainer from "main/ui/container/organisms/CommentRowsContainer";
-import MentionEditFormContainer from "main/ui/container/organisms/MentionEditFormContainer";
+import MentionDeleteButtonContainer from "main/ui/container/DeleteButtonContainer/MentionDeleteButtonContainer";
+import CommentRowsContainer from "main/ui/container/MentionTableContainer/row/comment/CommentRowsContainer";
+import MentionEditFormContainer from "main/ui/container/MentionTableContainer/row/mention/MentionEditFormContainer";
 import * as React from 'react';
 import withStyles, { WithStyles } from "react-jss";
 import { Button, Table } from "semantic-ui-react";
@@ -21,9 +21,14 @@ interface IProps extends WithStyles<typeof styles> {
 
 const MentionTableRow: React.SFC<IProps> = ({ classes, mention }) => {
   const { id, name, content, createdAt } = mention;
+
   const [isEditing, setIsEditing] = React.useState(false);
   const edit = () => setIsEditing(true)
   const finishEditing = () => setIsEditing(false)
+
+  const [isAddingComment, setIsAddingComment] = React.useState(false);
+  const toggleAddingComment = () => setIsAddingComment(!isAddingComment)
+  const finishAddingComment = () => setIsAddingComment(false)
 
   if (isEditing) {
     return <MentionEditFormContainer
@@ -32,7 +37,7 @@ const MentionTableRow: React.SFC<IProps> = ({ classes, mention }) => {
   }
 
   return <>
-    <Table.Row className={classes.mention}>
+    <Table.Row className={classes.mention} onClick={toggleAddingComment}>
       <Table.Cell>{id}</Table.Cell>
       <Table.Cell>{name}</Table.Cell>
       <Table.Cell>{content}</Table.Cell>
@@ -44,7 +49,11 @@ const MentionTableRow: React.SFC<IProps> = ({ classes, mention }) => {
         </Button.Group>
       </Table.Cell>
     </Table.Row>
-    <CommentRowsContainer mentionId={id} />
+    <CommentRowsContainer
+      mentionId={id}
+      isAddingComment={isAddingComment}
+      finishAddingComment={finishAddingComment}
+    />
   </>
 }
 

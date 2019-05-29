@@ -1,6 +1,6 @@
 import ICommentResponse from "main/api/comments/dto/ICommentResponse";
-import CommentDeleteButtonContainer from "main/ui/container/molecules/CommentDeleteButtonContainer";
-import CommentEditFormContainer from "main/ui/container/organisms/CommentEditFormContainer";
+import CommentDeleteButtonContainer from "main/ui/container/DeleteButtonContainer/CommentDeleteButtonContainer";
+import CommentEditFormContainer from "main/ui/container/MentionTableContainer/row/comment/CommentEditFormContainer";
 import * as React from 'react';
 import { Button, Icon, Table } from "semantic-ui-react";
 

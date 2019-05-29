@@ -1,5 +1,5 @@
 import createSagaMiddleware from "@redux-saga/core";
-import Home from 'main/ui/component/templates/Home';
+import Home from 'main/ui/component/Home';
 import { IRootState, rootReducer, rootSaga } from 'main/ui/modules';
 import React from 'react';
 import ReactDOM from 'react-dom';
