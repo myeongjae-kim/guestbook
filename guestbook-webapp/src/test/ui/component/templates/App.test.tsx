@@ -1,4 +1,4 @@
-import Home from 'main/ui/component/templates/Home';
+import Home from 'main/ui/component/Home';
 import React from 'react';
 import ReactDOM from 'react-dom';
 

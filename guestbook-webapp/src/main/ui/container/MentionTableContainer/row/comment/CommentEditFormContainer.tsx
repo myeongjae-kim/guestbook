@@ -1,6 +1,6 @@
 import ICommentPutRequest from 'main/api/comments/dto/ICommentPutRequest';
 import ICommentResponse from 'main/api/comments/dto/ICommentResponse';
-import CommentEditForm from 'main/ui/component/organisms/MentionTable/row/comment/CommentEditForm';
+import CommentEditForm from 'main/ui/component/MentionTable/row/comment/CommentEditForm';
 import { IRootState } from 'main/ui/modules';
 import * as editFormModule from 'main/ui/modules/comments/edit-form';
 import * as React from 'react';

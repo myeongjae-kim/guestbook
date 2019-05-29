@@ -1,4 +1,4 @@
-import DeleteButton from 'main/ui/component/molecules/DeleteButton';
+import DeleteButton from 'main/ui/component/DeleteButton';
 import * as deleteButtonModule from 'main/ui/modules/mentions/delete-button';
 import * as React from 'react';
 import { connect } from 'react-redux';

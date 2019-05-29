@@ -1,5 +1,5 @@
 import IMentionRequest from 'main/api/mentions/dto/IMentionRequest';
-import MentionAddForm from 'main/ui/component/organisms/MentionAddForm';
+import MentionAddForm from 'main/ui/component/MentionAddForm';
 import { IRootState } from 'main/ui/modules';
 import * as formModule from 'main/ui/modules/mentions/add-form';
 import * as React from 'react';

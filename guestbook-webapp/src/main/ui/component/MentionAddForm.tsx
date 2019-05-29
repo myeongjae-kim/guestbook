@@ -18,6 +18,9 @@ const styles = {
   },
   contentInput: {
     width: 250
+  },
+  headerCell: {
+    cursor: 'default !important'
   }
 }
 
@@ -39,9 +42,9 @@ const MentionAddForm: React.FC<IProps> = ({
   return <Table unstackable>
     <Table.Header>
       <Table.Row className={classes.center}>
-        <Table.HeaderCell>이름</Table.HeaderCell>
-        <Table.HeaderCell>내용</Table.HeaderCell>
-        <Table.HeaderCell>등록</Table.HeaderCell>
+        <Table.HeaderCell className={classes.headerCell}>이름</Table.HeaderCell>
+        <Table.HeaderCell className={classes.headerCell}>내용</Table.HeaderCell>
+        <Table.HeaderCell className={classes.headerCell}>등록</Table.HeaderCell>
       </Table.Row>
     </Table.Header>
     <Table.Body>

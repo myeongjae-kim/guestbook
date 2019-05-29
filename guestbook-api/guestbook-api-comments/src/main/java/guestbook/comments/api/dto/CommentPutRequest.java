@@ -1,6 +1,6 @@
 package guestbook.comments.api.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CommentPutRequest {
-    private @NotNull String content;
+    private @NotEmpty String content;
 }

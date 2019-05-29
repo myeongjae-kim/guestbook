@@ -1,5 +1,5 @@
-import MentionAddFormContainer from 'main/ui/container/organisms/MentionAddFormContainer';
-import MentionTableContainer from 'main/ui/container/organisms/MentionTableContainer';
+import MentionAddFormContainer from 'main/ui/container/MentionTableContainer/row/mention/MentionAddFormContainer';
+import MentionTableContainer from 'main/ui/container/MentionTableContainer';
 import React from 'react';
 import withStyles, { WithStyles } from "react-jss";
 

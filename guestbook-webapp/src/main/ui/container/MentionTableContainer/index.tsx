@@ -1,5 +1,5 @@
 import IMentionResponse from 'main/api/mentions/dto/IMentionResponse';
-import MentionTable from 'main/ui/component/organisms/MentionTable';
+import MentionTable from 'main/ui/component/MentionTable';
 import { IRootState } from 'main/ui/modules';
 import * as tableModule from 'main/ui/modules/mentions/table';
 import * as React from 'react';

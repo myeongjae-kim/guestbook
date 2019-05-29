@@ -1,5 +1,6 @@
 package guestbook.comments.api.dto;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -9,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class CommentPostRequest {
     private @NotNull Integer mentionId;
-    private @NotNull String name;
-    private @NotNull String content;
+    private @NotEmpty String name;
+    private @NotEmpty String content;
 }
