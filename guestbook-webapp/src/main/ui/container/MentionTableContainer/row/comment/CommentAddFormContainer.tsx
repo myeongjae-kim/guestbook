@@ -1,5 +1,5 @@
 import ICommentPostRequest from 'main/api/comments/dto/ICommentPostRequest';
-import CommentAddForm from 'main/ui/component/organisms/MentionTable/row/comment/CommentAddForm';
+import CommentAddForm from 'main/ui/component/MentionTable/row/comment/CommentAddForm';
 import { IRootState } from 'main/ui/modules';
 import * as addFormModule from 'main/ui/modules/comments/add-form';
 import * as React from 'react';

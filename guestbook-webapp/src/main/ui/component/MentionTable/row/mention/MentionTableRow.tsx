@@ -1,7 +1,7 @@
 import IMentionResponse from "main/api/mentions/dto/IMentionResponse";
-import MentionDeleteButtonContainer from "main/ui/container/molecules/MentionDeleteButtonContainer";
-import CommentRowsContainer from "main/ui/container/organisms/CommentRowsContainer";
-import MentionEditFormContainer from "main/ui/container/organisms/MentionEditFormContainer";
+import MentionDeleteButtonContainer from "main/ui/container/DeleteButtonContainer/MentionDeleteButtonContainer";
+import CommentRowsContainer from "main/ui/container/MentionTableContainer/row/comment/CommentRowsContainer";
+import MentionEditFormContainer from "main/ui/container/MentionTableContainer/row/mention/MentionEditFormContainer";
 import * as React from 'react';
 import withStyles, { WithStyles } from "react-jss";
 import { Button, Table } from "semantic-ui-react";

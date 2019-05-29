@@ -1,6 +1,6 @@
 import ICommentResponse from 'main/api/comments/dto/ICommentResponse';
-import Maybe from 'main/ui/component/atom/Maybe';
-import CommentRows from 'main/ui/component/organisms/MentionTable/row/comment/CommentRows';
+import Maybe from 'main/ui/component/Maybe';
+import CommentRows from 'main/ui/component/MentionTable/row/comment/CommentRows';
 import { IRootState } from 'main/ui/modules';
 import * as rowsModule from 'main/ui/modules/comments/rows';
 import * as React from 'react';
