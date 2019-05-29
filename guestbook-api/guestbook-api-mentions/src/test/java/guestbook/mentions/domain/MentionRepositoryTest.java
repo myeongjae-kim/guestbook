@@ -26,7 +26,7 @@ public class MentionRepositoryTest {
         then(mentions).hasSize(sizeOfMentions);
 
         for (int i = 1; i < sizeOfMentions; i++) {
-           then(mentions.get(i-1).getCreatedAt()).isAfterOrEqualTo(mentions.get(i).getCreatedAt());
+            then(mentions.get(i - 1).getCreatedAt()).isAfterOrEqualTo(mentions.get(i).getCreatedAt());
         }
     }
 }

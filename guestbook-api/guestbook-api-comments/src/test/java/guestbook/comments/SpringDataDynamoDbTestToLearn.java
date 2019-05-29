@@ -32,7 +32,8 @@ class SpringDataDynamoDbTestToLearn {
                 .content("content").build();
     }
 
-    @Test @Disabled
+    @Test
+    @Disabled
     void createTable_ValidInput_TableHasBeenCreated() {
         CreateTableRequest createTableRequest = dynamoDbMapper.generateCreateTableRequest(Comment.class)
                 .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
@@ -46,7 +47,8 @@ class SpringDataDynamoDbTestToLearn {
         then(TableUtils.createTableIfNotExists(amazonDynamoDb, createTableRequest)).isTrue();
     }
 
-    @Test @Disabled
+    @Test
+    @Disabled
     void putItem_ShouldBeCalledAfterTableCreation_IncreasedScannedCounts() {
         ScanRequest scanRequest = new ScanRequest().withTableName("Comment");
         int beforeCount = amazonDynamoDb.scan(scanRequest).getCount();
@@ -58,7 +60,8 @@ class SpringDataDynamoDbTestToLearn {
         then(result.getCount()).isEqualTo(beforeCount + 1);
     }
 
-    @Test @Disabled
+    @Test
+    @Disabled
     void putAnddeleteItem_ShouldBeCalledAfterTableCreation_SameScannedCounts() {
         ScanRequest scanRequest = new ScanRequest().withTableName("Comment");
         int beforeCount = amazonDynamoDb.scan(scanRequest).getCount();

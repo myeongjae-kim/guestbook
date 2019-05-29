@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class AwsDynamoDbSdkTestToLearn {
-    private AmazonDynamoDB amazonDynamoDB;
+    private AmazonDynamoDB amazonDynamoDb;
     private Map<String, AttributeValue> item;
 
     @BeforeEach
@@ -43,7 +43,7 @@ class AwsDynamoDbSdkTestToLearn {
         AWSCredentials awsCredentials = new BasicAWSCredentials("key1", "key2");
         AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);
 
-        amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
+        amazonDynamoDb = AmazonDynamoDBClientBuilder.standard()
                 .withCredentials(awsCredentialsProvider)
                 .withEndpointConfiguration(
                         new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "ap-northeast-2"))
@@ -58,7 +58,8 @@ class AwsDynamoDbSdkTestToLearn {
         item.put("deletedAt", (new AttributeValue()).withS("to be changed"));
     }
 
-    @Test @Disabled
+    @Test
+    @Disabled
     void createTable_ValidInput_TableHasBeenCreated() {
         CreateTableRequest createTableRequest = (new CreateTableRequest())
                 .withAttributeDefinitions(
@@ -72,7 +73,7 @@ class AwsDynamoDbSdkTestToLearn {
                                 .withIndexName("byMentionId")
                                 .withKeySchema(
                                         new KeySchemaElement("mentionId", KeyType.HASH),
-                                        new KeySchemaElement("createdAt", KeyType.RANGE) )
+                                        new KeySchemaElement("createdAt", KeyType.RANGE))
                                 .withProjection(
                                         (new Projection()).withProjectionType(ProjectionType.ALL))
                                 .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
@@ -80,21 +81,23 @@ class AwsDynamoDbSdkTestToLearn {
                         new ProvisionedThroughput(1L, 1L)
                 );
 
-        boolean hasTableBeenCreated = TableUtils.createTableIfNotExists(amazonDynamoDB, createTableRequest);
+        boolean hasTableBeenCreated = TableUtils.createTableIfNotExists(amazonDynamoDb, createTableRequest);
         then(hasTableBeenCreated).isTrue();
     }
 
-    @Test @Disabled
+    @Test
+    @Disabled
     void putItem_ShouldBeCalledAfterTableCreation_StatusOk() {
         PutItemRequest putItemRequest = (new PutItemRequest())
                 .withTableName("Comment")
                 .withItem(item);
 
-        PutItemResult putItemResult = amazonDynamoDB.putItem(putItemRequest);
+        PutItemResult putItemResult = amazonDynamoDb.putItem(putItemRequest);
         then(putItemResult.getSdkHttpMetadata().getHttpStatusCode()).isEqualTo(200);
     }
 
-    @Test @Disabled
+    @Test
+    @Disabled
     void getItem_ShouldBeCalledAfterPuttingItem_FoundItem() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
@@ -103,12 +106,13 @@ class AwsDynamoDbSdkTestToLearn {
                 .withTableName("Comment")
                 .withKey(key);
 
-        GetItemResult getItemResult = amazonDynamoDB.getItem(getItemRequest);
+        GetItemResult getItemResult = amazonDynamoDb.getItem(getItemRequest);
 
         then(getItemResult.getItem()).containsAllEntriesOf(item);
     }
 
-    @Test @Disabled
+    @Test
+    @Disabled
     void deleteItem_ShouldBeCalledAfterPuttingItem_StatsOk() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
@@ -117,12 +121,13 @@ class AwsDynamoDbSdkTestToLearn {
                 .withTableName("Comment")
                 .withKey(key);
 
-        DeleteItemResult deleteItemResult = amazonDynamoDB.deleteItem(deleteItemRequest);
+        DeleteItemResult deleteItemResult = amazonDynamoDb.deleteItem(deleteItemRequest);
 
         then(deleteItemResult.getSdkHttpMetadata().getHttpStatusCode()).isEqualTo(200);
     }
 
-    @Test @Disabled
+    @Test
+    @Disabled
     void getItem_ShouldBeCalledAfterDeletingItem_NullItem() {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("id", (new AttributeValue()).withS("uuid"));
@@ -131,7 +136,7 @@ class AwsDynamoDbSdkTestToLearn {
                 .withTableName("Comment")
                 .withKey(key);
 
-        GetItemResult getItemResult = amazonDynamoDB.getItem(getItemRequest);
+        GetItemResult getItemResult = amazonDynamoDb.getItem(getItemRequest);
 
         then(getItemResult.getItem()).isNull();
     }

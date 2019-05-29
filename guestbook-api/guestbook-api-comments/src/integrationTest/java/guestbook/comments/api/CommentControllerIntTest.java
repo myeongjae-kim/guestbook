@@ -127,7 +127,7 @@ class CommentControllerIntTest {
     }
 
     private String createCommentAndReturnId(int mentionId, String name, String content) {
-        RestTemplate restTemplate = new RestTemplate();
+        final RestTemplate restTemplate = new RestTemplate();
 
         CommentPostRequest commentPostRequest = new CommentPostRequest();
         commentPostRequest.setMentionId(mentionId);
