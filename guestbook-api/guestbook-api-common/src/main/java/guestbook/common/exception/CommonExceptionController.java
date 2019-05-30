@@ -1,8 +1,9 @@
 package guestbook.common.exception;
 
+import guestbook.common.dto.ApiError;
+
 import java.util.stream.Collectors;
 
-import guestbook.common.dto.ApiError;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 

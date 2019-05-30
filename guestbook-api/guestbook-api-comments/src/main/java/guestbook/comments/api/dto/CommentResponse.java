@@ -1,8 +1,9 @@
 package guestbook.comments.api.dto;
 
+import guestbook.comments.domain.Comment;
+
 import java.time.LocalDateTime;
 
-import guestbook.comments.domain.Comment;
 import lombok.Getter;
 
 @Getter
