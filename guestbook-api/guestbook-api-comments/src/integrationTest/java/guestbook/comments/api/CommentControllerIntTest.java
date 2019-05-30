@@ -12,13 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import guestbook.comments.CommentsApiApplication;
+import guestbook.comments.api.dto.CommentPostRequest;
+import guestbook.comments.api.dto.CommentPutRequest;
+
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-import guestbook.comments.CommentsApiApplication;
-import guestbook.comments.api.dto.CommentPostRequest;
-import guestbook.comments.api.dto.CommentPutRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

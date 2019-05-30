@@ -1,8 +1,9 @@
 package guestbook.mentions.api.dto;
 
+import guestbook.mentions.domain.Mention;
+
 import java.time.LocalDateTime;
 
-import guestbook.mentions.domain.Mention;
 import lombok.Getter;
 
 @Getter
