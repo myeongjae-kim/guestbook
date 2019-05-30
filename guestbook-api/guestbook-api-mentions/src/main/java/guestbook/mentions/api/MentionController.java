@@ -1,11 +1,12 @@
 package guestbook.mentions.api;
 
-import java.util.List;
-import javax.validation.Valid;
-
 import guestbook.mentions.api.dto.MentionRequest;
 import guestbook.mentions.api.dto.MentionResponse;
 import guestbook.mentions.service.MentionService;
+
+import java.util.List;
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

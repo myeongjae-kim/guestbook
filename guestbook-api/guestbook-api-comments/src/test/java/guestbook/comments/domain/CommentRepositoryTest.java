@@ -3,12 +3,13 @@ package guestbook.comments.domain;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 
+import guestbook.comments.config.DynamoDbConfig;
+import guestbook.comments.exception.CommentNotFoundException;
+
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-import guestbook.comments.config.DynamoDbConfig;
-import guestbook.comments.exception.CommentNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
