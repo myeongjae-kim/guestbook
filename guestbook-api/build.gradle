@@ -58,6 +58,7 @@ subprojects {
 		shouldRunAfter test
 		useJUnitPlatform()
 	}
+	check.dependsOn integrationTest
 }
 
 project(':guestbook-api-mentions') {

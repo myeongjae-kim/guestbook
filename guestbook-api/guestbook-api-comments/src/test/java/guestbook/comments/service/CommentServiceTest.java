@@ -8,16 +8,17 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import guestbook.comments.api.dto.CommentPostRequest;
 import guestbook.comments.api.dto.CommentPutRequest;
 import guestbook.comments.api.dto.CommentResponse;
 import guestbook.comments.domain.Comment;
 import guestbook.comments.domain.CommentRepository;
 import guestbook.comments.exception.CommentNotFoundException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
