@@ -1,13 +1,10 @@
 package guestbook.comments.config;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 
 import java.time.LocalDateTime;
@@ -15,12 +12,10 @@ import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.socialsignin.spring.data.dynamodb.repository.config.DynamoDBMapperFactory;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 @Configuration
 @EnableDynamoDBRepositories(basePackages = "guestbook.comments.domain")
@@ -29,7 +24,7 @@ public class DynamoDbConfig {
     private String amazonDynamoDbEndpoint;
 
     @Value("${amazon.dynamodb.region}")
-    private String amazonDynamoDbReigion;
+    private String amazonDynamoDbRegion;
 
     @Value("${amazon.aws.accesskey}")
     private String amazonAwsAccessKey;
@@ -37,33 +32,16 @@ public class DynamoDbConfig {
     @Value("${amazon.aws.secretkey}")
     private String amazonAwsSecretKey;
 
-    private AWSCredentialsProvider amazonAwsCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(amazonAwsCredentials());
-    }
-
-    @Bean
-    public AWSCredentials amazonAwsCredentials() {
-        return new BasicAWSCredentials(amazonAwsAccessKey, amazonAwsSecretKey);
-    }
-
-    @Primary
-    @Bean
-    public DynamoDBMapperConfig dynamoDbMapperConfig() {
-        return DynamoDBMapperConfig.DEFAULT;
-    }
-
-    @Bean(name = "dynamoDB-DynamoDBMapper")
-    public DynamoDBMapperFactory dynamoDbMapperFactory() {
-        return new DynamoDBMapperFactory(amazonDynamoDb(), dynamoDbMapperConfig());
-    }
-
     @Bean(name = "amazonDynamoDB")
     public AmazonDynamoDB amazonDynamoDb() {
+        AWSStaticCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(
+                new BasicAWSCredentials(amazonAwsAccessKey, amazonAwsSecretKey));
+        EndpointConfiguration endpointConfiguration =
+                new EndpointConfiguration(amazonDynamoDbEndpoint, amazonDynamoDbRegion);
+
         return AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(amazonAwsCredentialsProvider())
-                .withEndpointConfiguration(
-                        new AwsClientBuilder.EndpointConfiguration(amazonDynamoDbEndpoint, amazonDynamoDbReigion))
-                .build();
+                .withCredentials(credentialsProvider)
+                .withEndpointConfiguration(endpointConfiguration).build();
     }
 
     public static class LocalDateTimeConverter implements DynamoDBTypeConverter<Date, LocalDateTime> {
