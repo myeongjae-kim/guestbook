@@ -4,7 +4,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
@@ -37,33 +37,16 @@ public class DynamoDbConfig {
     @Value("${amazon.aws.secretkey}")
     private String amazonAwsSecretKey;
 
-    private AWSCredentialsProvider amazonAwsCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(amazonAwsCredentials());
-    }
-
-    @Bean
-    public AWSCredentials amazonAwsCredentials() {
-        return new BasicAWSCredentials(amazonAwsAccessKey, amazonAwsSecretKey);
-    }
-
-    @Primary
-    @Bean
-    public DynamoDBMapperConfig dynamoDbMapperConfig() {
-        return DynamoDBMapperConfig.DEFAULT;
-    }
-
-    @Bean(name = "dynamoDB-DynamoDBMapper")
-    public DynamoDBMapperFactory dynamoDbMapperFactory() {
-        return new DynamoDBMapperFactory(amazonDynamoDb(), dynamoDbMapperConfig());
-    }
-
     @Bean(name = "amazonDynamoDB")
     public AmazonDynamoDB amazonDynamoDb() {
+        AWSStaticCredentialsProvider credentialsProvider = new AWSStaticCredentialsProvider(
+                new BasicAWSCredentials(amazonAwsAccessKey, amazonAwsSecretKey));
+        EndpointConfiguration endpointConfiguration =
+                new EndpointConfiguration(amazonDynamoDbEndpoint, amazonDynamoDbReigion);
+
         return AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(amazonAwsCredentialsProvider())
-                .withEndpointConfiguration(
-                        new AwsClientBuilder.EndpointConfiguration(amazonDynamoDbEndpoint, amazonDynamoDbReigion))
-                .build();
+                .withCredentials(credentialsProvider)
+                .withEndpointConfiguration(endpointConfiguration).build();
     }
 
     public static class LocalDateTimeConverter implements DynamoDBTypeConverter<Date, LocalDateTime> {
