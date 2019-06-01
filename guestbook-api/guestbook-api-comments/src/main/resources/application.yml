@@ -1,3 +1,7 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
 server:
   port: 8081
 amazon:
@@ -7,3 +11,4 @@ amazon:
   aws:
     accesskey: "key"
     secretkey: "key2"
+
