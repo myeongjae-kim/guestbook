@@ -23,8 +23,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(value = {SpringExtension.class, MockitoExtension.class})
 class MentionServiceTest {
     private MentionService mentionService;
     private @Mock MentionRepository mentionRepository;

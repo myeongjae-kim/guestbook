@@ -1,27 +1,21 @@
 version '0.0.1-SNAPSHOT'
 
-ext {
-    springDataCommonsVersion = "2.0.13.RELEASE"
-    awsJavaSdkDynamoDBVersion = "1.11.557"
-    springDataDynamoDBVersion = "5.0.4"
-}
-
 sourceCompatibility = 1.8
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor("org.projectlombok:lombok")
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor("org.projectlombok:lombok:1.18.8")
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation "org.springframework.data:spring-data-commons:${springDataCommonsVersion}"
-    implementation "com.amazonaws:aws-java-sdk-dynamodb:${awsJavaSdkDynamoDBVersion}"
-    implementation "com.github.derjust:spring-data-dynamodb:${springDataDynamoDBVersion}"
+    implementation "org.springframework.data:spring-data-commons"
+    implementation "com.amazonaws:aws-java-sdk-dynamodb:1.11.563"
+    implementation "com.github.derjust:spring-data-dynamodb:5.0.4"
 
     testImplementation ('org.springframework.boot:spring-boot-starter-test') {
         exclude module: 'junit'
     }
     testImplementation('org.junit.jupiter:junit-jupiter-api')
-    testImplementation('org.mockito:mockito-junit-jupiter')
+    testImplementation('org.mockito:mockito-junit-jupiter:2.23.4')
     testImplementation('org.junit.jupiter:junit-jupiter-params')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
 

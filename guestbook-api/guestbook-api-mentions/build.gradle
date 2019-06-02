@@ -3,8 +3,8 @@ version '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor("org.projectlombok:lombok")
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor("org.projectlombok:lombok:1.18.8")
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -13,7 +13,7 @@ dependencies {
         exclude module: 'junit'
     }
     testImplementation('org.junit.jupiter:junit-jupiter-api')
-    testImplementation('org.mockito:mockito-junit-jupiter')
+    testImplementation('org.mockito:mockito-junit-jupiter:2.23.4')
     testImplementation('org.junit.jupiter:junit-jupiter-params')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
 
