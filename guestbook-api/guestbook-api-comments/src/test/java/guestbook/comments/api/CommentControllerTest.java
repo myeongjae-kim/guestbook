@@ -34,8 +34,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest
-@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
 class CommentControllerTest {
     private @Autowired MockMvc mvc;
     private @MockBean CommentService commentService;
