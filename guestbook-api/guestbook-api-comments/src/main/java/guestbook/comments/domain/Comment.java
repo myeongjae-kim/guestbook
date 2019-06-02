@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter // Setters are used in spring-data-dynamodb
+@Setter // Setters are used in aws-java-dynamodb-sdk
 @NoArgsConstructor
 public class Comment {
     private String id;
