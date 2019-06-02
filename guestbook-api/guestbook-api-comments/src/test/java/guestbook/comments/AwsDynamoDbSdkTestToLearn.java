@@ -6,7 +6,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
@@ -42,12 +42,11 @@ class AwsDynamoDbSdkTestToLearn {
     void setup() {
         AWSCredentials awsCredentials = new BasicAWSCredentials("key1", "key2");
         AWSCredentialsProvider awsCredentialsProvider = new AWSStaticCredentialsProvider(awsCredentials);
+        EndpointConfiguration endpointConfiguration = new EndpointConfiguration("http://localhost:8000", "ap-northeast-2");
 
         amazonDynamoDb = AmazonDynamoDBClientBuilder.standard()
                 .withCredentials(awsCredentialsProvider)
-                .withEndpointConfiguration(
-                        new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "ap-northeast-2"))
-                .build();
+                .withEndpointConfiguration(endpointConfiguration).build();
 
         item = new HashMap<>();
         item.put("id", (new AttributeValue()).withS("uuid"));
