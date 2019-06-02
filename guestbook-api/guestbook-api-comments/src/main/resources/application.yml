@@ -7,4 +7,6 @@ amazon:
   aws:
     accesskey: "key"
     secretkey: "key2"
-
+spring:
+  profiles:
+    active: local

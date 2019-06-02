@@ -23,7 +23,7 @@ public class CommentsApiApplication {
     }
 
     @Bean
-    @Profile("!test")
+    @Profile("local")
     public CommandLineRunner runner(AmazonDynamoDB amazonDynamoDb) {
         return (args) -> {
             amazonDynamoDb.putItem(getCommentRequest(
