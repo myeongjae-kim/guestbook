@@ -1,5 +1,6 @@
 import IMentionResponse from "main/api/mentions/dto/IMentionResponse";
 import MentionDeleteButtonContainer from "main/ui/container/DeleteButtonContainer/MentionDeleteButtonContainer";
+import CommentRowsContainer from "main/ui/container/MentionTableContainer/row/comment/CommentRowsContainer";
 import MentionEditFormContainer from "main/ui/container/MentionTableContainer/row/mention/MentionEditFormContainer";
 import * as React from 'react';
 import withStyles, { WithStyles } from "react-jss";
@@ -7,6 +8,7 @@ import { Button, Table } from "semantic-ui-react";
 
 const styles = {
   mention: {
+    cursor: 'pointer',
     '&:hover': {
       background: "#fafafa"
     }
@@ -24,6 +26,10 @@ const MentionTableRow: React.SFC<IProps> = ({ classes, mention }) => {
   const edit = () => setIsEditing(true)
   const finishEditing = () => setIsEditing(false)
 
+  const [isAddingComment, setIsAddingComment] = React.useState(false);
+  const toggleAddingComment = () => setIsAddingComment(!isAddingComment)
+  const finishAddingComment = () => setIsAddingComment(false)
+
   if (isEditing) {
     return <MentionEditFormContainer
       oldMention={mention}
@@ -31,7 +37,7 @@ const MentionTableRow: React.SFC<IProps> = ({ classes, mention }) => {
   }
 
   return <>
-    <Table.Row className={classes.mention} >
+    <Table.Row className={classes.mention} onClick={toggleAddingComment}>
       <Table.Cell>{id}</Table.Cell>
       <Table.Cell>{name}</Table.Cell>
       <Table.Cell>{content}</Table.Cell>
@@ -43,6 +49,11 @@ const MentionTableRow: React.SFC<IProps> = ({ classes, mention }) => {
         </Button.Group>
       </Table.Cell>
     </Table.Row>
+    <CommentRowsContainer
+      mentionId={id}
+      isAddingComment={isAddingComment}
+      finishAddingComment={finishAddingComment}
+    />
   </>
 }
 
