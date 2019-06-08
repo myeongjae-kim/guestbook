@@ -21,3 +21,37 @@ dependencies {
 
     runtime 'org.springframework.boot:spring-boot-devtools'
 }
+
+task dockerComposeUp(type: Exec) {
+    group = 'dynamodb'
+    commandLine "docker-compose", "up", "-d"
+}
+
+task dockerComposeDown(type: Exec) {
+    group = 'dynamodb'
+    commandLine "docker-compose", "down"
+}
+
+task createCommentTable (type: Exec) {
+    group = 'dynamodb'
+    commandLine "bash", "-c", "sleep 3; bash src/main/resources/scripts/create-comment-table.sh"
+}
+
+task deleteCommentTable (type: Exec) {
+    group = 'dynamodb'
+    commandLine "bash", "src/main/resources/scripts/delete-comment-table.sh"
+}
+
+createCommentTable.dependsOn dockerComposeUp
+deleteCommentTable.finalizedBy dockerComposeDown
+
+if (System.env['GUESTBOOK_REMOTE'] == null) {
+    bootRun.dependsOn createCommentTable
+    bootRun.finalizedBy deleteCommentTable
+
+    test.dependsOn createCommentTable
+    test.finalizedBy deleteCommentTable
+
+    integrationTest.dependsOn createCommentTable
+    integrationTest.finalizedBy deleteCommentTable
+}

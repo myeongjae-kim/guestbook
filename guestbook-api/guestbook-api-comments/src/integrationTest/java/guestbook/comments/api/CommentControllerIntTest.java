@@ -12,23 +12,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
-import com.amazonaws.services.dynamodbv2.model.Projection;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import guestbook.comments.CommentsApiApplication;
 import guestbook.comments.api.dto.CommentPostRequest;
 import guestbook.comments.api.dto.CommentPutRequest;
 import guestbook.comments.config.DynamoDbConfig;
-import guestbook.comments.domain.Comment;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,32 +49,16 @@ class CommentControllerIntTest {
     private @Autowired ObjectMapper objectMapper;
     private @LocalServerPort Integer randomServerPort;
 
-    private @Autowired AmazonDynamoDB amazonDynamoDb;
-    private @Autowired DynamoDBMapper dynamoDbMapper;
+    private int mentionId;
 
-    // TODO: It is weired to create and delete table for each test. Refactor it somehow...
     @BeforeEach
-    void createTable() {
-        CreateTableRequest createTableRequest = dynamoDbMapper.generateCreateTableRequest(Comment.class)
-                .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
-
-        createTableRequest.getGlobalSecondaryIndexes().forEach(
-                idx -> idx
-                        .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
-                        .withProjection(new Projection().withProjectionType("ALL"))
-        );
-        TableUtils.createTableIfNotExists(amazonDynamoDb, createTableRequest);
-    }
-
-    @AfterEach
-    void deleteTable() {
-        DeleteTableRequest deleteTableRequest = dynamoDbMapper.generateDeleteTableRequest(Comment.class);
-        TableUtils.deleteTableIfExists(amazonDynamoDb, deleteTableRequest);
+    void setup() {
+        mentionId = (new Random()).nextInt() & Integer.MAX_VALUE;
     }
 
     @Test
     void readComment_ValidInput_ValidOutput() throws Exception {
-        String id = createCommentAndReturnId(1);
+        String id = createCommentAndReturnId(mentionId);
         this.mvc.perform(get("/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
@@ -94,10 +72,10 @@ class CommentControllerIntTest {
     void readComments_WithMentionId_ValidOutput() throws Exception {
         final int size = 10;
         List<String> ids = IntStream.range(0, size)
-                .mapToObj(i -> createCommentAndReturnId(1, "arbitrary name", "arbitrary content"))
+                .mapToObj(i -> createCommentAndReturnId(mentionId, "arbitrary name", "arbitrary content"))
                 .collect(toList());
 
-        MvcResult result = this.mvc.perform(get("/mention/{mentionId}", 1))
+        MvcResult result = this.mvc.perform(get("/mention/{mentionId}", mentionId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(size))
                 .andReturn();
@@ -109,7 +87,7 @@ class CommentControllerIntTest {
     @Test
     void createComment_ValidInput_ValidOutput() throws Exception {
         CommentPostRequest commentPostRequest = new CommentPostRequest();
-        commentPostRequest.setMentionId(1);
+        commentPostRequest.setMentionId(mentionId);
         commentPostRequest.setName("name");
         commentPostRequest.setContent("content");
 
@@ -122,7 +100,7 @@ class CommentControllerIntTest {
 
     @Test
     void updateComment_ValidInput_ValidOutput() throws Exception {
-        String id = createCommentAndReturnId(1);
+        String id = createCommentAndReturnId(mentionId);
 
         CommentPutRequest commentPutRequest = new CommentPutRequest();
         String modifiedContent = "modified content";
@@ -143,7 +121,7 @@ class CommentControllerIntTest {
 
     @Test
     void deleteComment_ValidInput_ValidOutput() throws Exception {
-        String id = createCommentAndReturnId(1);
+        String id = createCommentAndReturnId(mentionId);
 
         this.mvc.perform(delete("/{id}", id))
                 .andExpect(status().isOk());

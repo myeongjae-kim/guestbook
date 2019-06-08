@@ -12,9 +12,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 
+import guestbook.comments.config.DynamoDbConfig;
+
 import java.time.LocalDateTime;
 
-import guestbook.comments.config.DynamoDbConfig;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
